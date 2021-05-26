@@ -1,0 +1,21 @@
+{
+	"name": "manifest",
+	"properties": {
+		"targetBigDataPool": {
+			"type": "BigDataPoolReference"
+		},
+		"language": "python",
+		"jobProperties": {
+			"name": "manifest",
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			},
+			"args": [],
+			"jars": [],
+			"files": [],
+			"numExecutors": 2
+		}
+	}
+}

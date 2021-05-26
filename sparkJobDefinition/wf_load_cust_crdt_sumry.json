@@ -1,0 +1,21 @@
+{
+	"name": "wf_load_cust_crdt_sumry",
+	"properties": {
+		"targetBigDataPool": {
+			"type": "BigDataPoolReference"
+		},
+		"language": "python",
+		"jobProperties": {
+			"name": "wf_load_cust_crdt_sumry",
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			},
+			"args": [],
+			"jars": [],
+			"files": [],
+			"numExecutors": 2
+		}
+	}
+}
