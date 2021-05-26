@@ -1,0 +1,20 @@
+{
+	"name": "create_data_source",
+	"properties": {
+		"folder": {
+			"name": "POLYBASEInsert"
+		},
+		"content": {
+			"query": "CREATE EXTERNAL DATA SOURCE idwadlsstoragedemo\nWITH\n( \n    LOCATION = 'abfss://adlsdemofilesystem@idwadlsstorage.dfs.core.windows.net' ,\n    CREDENTIAL = idwadlsstorage_key,\n    TYPE = HADOOP\n);",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "idwdemosqlpool",
+				"databaseName": "idwdemosqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

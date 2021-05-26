@@ -1,0 +1,20 @@
+{
+	"name": "validation",
+	"properties": {
+		"folder": {
+			"name": "POLYBASEInsert"
+		},
+		"content": {
+			"query": "--  select * from dbo.raboempext;\n-- select * from dbo.raboemp order by EMPID;\nselect * from dbo.hashraboemp order by EMPID;\n-- MERGE dbo.hashraboemp AS TARGET\n-- USING dbo.raboempext AS SOURCE\n-- ON TARGET.EMPID = SOURCE.EMPID\n-- WHEN MATCHED \n-- THEN UPDATE SET TARGET.NAME = SOURCE.NAME, TARGET.DEPT_ID = SOURCE.DEPT_ID\n-- WHEN NOT MATCHED\n-- THEN INSERT (EMPID, NAME, DEPT_ID) VALUES (SOURCE.EMPID, SOURCE.NAME, SOURCE.DEPT_ID);\n\n-- UPDATE TARGET\n-- SET \n--    TARGET.NAME = SOURCE.NAME, TARGET.DEPT_ID = SOURCE.DEPT_ID\n-- FROM dbo.hashraboemp AS TARGET\n-- INNER JOIN\n-- dbo.raboempext AS SOURCE\n-- ON TARGET.EMPID = SOURCE.EMPID;\n\n\n-- CREATE TABLE dbo.hashraboemp\n-- WITH (\n--     CLUSTERED COLUMNSTORE INDEX,\n--     DISTRIBUTION = HASH(EMPID)\n--     )\n-- AS\n-- SELECT * FROM dbo.raboemp;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "idwdemosqlpool",
+				"databaseName": "idwdemosqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

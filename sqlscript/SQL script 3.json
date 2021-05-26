@@ -1,0 +1,16 @@
+{
+	"name": "SQL script 3",
+	"properties": {
+		"content": {
+			"query": "SELECT * FROM dbo.Target1;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "idwdemosqlpool",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

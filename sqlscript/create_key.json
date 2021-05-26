@@ -1,0 +1,20 @@
+{
+	"name": "create_key",
+	"properties": {
+		"folder": {
+			"name": "POLYBASEInsert"
+		},
+		"content": {
+			"query": "\nCREATE DATABASE SCOPED CREDENTIAL idwadlsstorage_key\nWITH\n    IDENTITY = 'idwadlsstorageforload' ,\n    SECRET = 'l5TVl6o6M4viMAFLv9d3Xw8/fXCsb8kv8y1NRfs1esCZj02Ar/yGp5HO4Fkra9BjHxcxNofOZ9NQe+KskIgV9w=='\n;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "idwdemosqlpool",
+				"databaseName": "idwdemosqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

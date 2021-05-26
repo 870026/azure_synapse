@@ -1,0 +1,16 @@
+{
+	"name": "SQL script 4",
+	"properties": {
+		"content": {
+			"query": "select * from dbo.emp_tgt;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "idwdemosqlpool",
+				"databaseName": "idwdemosqlpool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

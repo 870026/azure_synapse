@@ -1,0 +1,20 @@
+{
+	"name": "load_data_table",
+	"properties": {
+		"folder": {
+			"name": "POLYBASEInsert"
+		},
+		"content": {
+			"query": "-- INSERT INTO dbo.raboemp\n-- SELECT * FROM dbo.raboempext ext where ext.empid != raboemp.empid;\nDROP EXTERNAL TABLE dbo.raboempext;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "idwdemosqlpool",
+				"databaseName": "idwdemosqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

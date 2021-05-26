@@ -1,0 +1,19 @@
+{
+	"name": "CreateExternalTable",
+	"properties": {
+		"folder": {
+			"name": "PolyBase"
+		},
+		"content": {
+			"query": "CREATE EXTERNAL TABLE dbo.Target1Ext (\nDATA_EFFECTIVE_DATE VARCHAR(255) NULL,\nJOB_RUN_DATE VARCHAR(255) NULL,\nAPPL_MAL_CODE VARCHAR(255) NULL,\nRECORD_COUNT VARCHAR(255) NULL,\nENTITY_NAME VARCHAR(255) NULL,\nPROCESS_FLAG VARCHAR(255) NULL,\nLOAD_START_TIME VARCHAR(255) NULL,\nLOAD_END_TIME VARCHAR(255) NULL\n)\nWITH (\n    LOCATION='Target1.csv',\n    DATA_SOURCE=idwadlsstorage,\n    FILE_FORMAT=csvFile\n);",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "idwdemosqlpool",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

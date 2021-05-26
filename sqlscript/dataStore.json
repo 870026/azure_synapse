@@ -1,0 +1,16 @@
+{
+	"name": "dataStore",
+	"properties": {
+		"content": {
+			"query": "CREATE EXTERNAL DATA SOURCE idwadlsstorage\nWITH\n( \n    LOCATION = 'abfss://adlsdemofilesystem@idwadlsstorage.dfs.core.windows.net' ,\n    CREDENTIAL = idwadlsstorage_Credential ,\n    TYPE = HADOOP\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "idwdemosqlpool",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

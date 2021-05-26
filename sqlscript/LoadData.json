@@ -1,0 +1,19 @@
+{
+	"name": "LoadData",
+	"properties": {
+		"folder": {
+			"name": "PolyBase"
+		},
+		"content": {
+			"query": "CREATE TABLE dbo.Target1\nWITH (   \n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = ROUND_ROBIN\n)\nAS\nSELECT * FROM dbo.Target1Ext;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "idwdemosqlpool",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}
