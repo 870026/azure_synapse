@@ -1,0 +1,44 @@
+{
+   "name" : "DF_DataMapping_2",
+   "type" : "Microsoft.DataFactory/factories/dataflows",
+   "apiVersion" : "2018-06-01",
+   "properties" : {
+      "type" : "MappingDataFlow",
+      "typeProperties" : {
+         "sources" : [ {
+            "dataset" : {
+               "referenceName" : "MARA",
+               "type" : "DatasetReference"
+            },
+            "name" : "MARA"
+         }, {
+            "dataset" : {
+               "referenceName" : "MAKT",
+               "type" : "DatasetReference"
+            },
+            "name" : "MAKT"
+         } ],
+         "sinks" : [ {
+            "dataset" : {
+               "referenceName" : "Item",
+               "type" : "DatasetReference"
+            },
+            "name" : "Item"
+         }, {
+            "dataset" : {
+               "referenceName" : "RelatedItem",
+               "type" : "DatasetReference"
+            },
+            "name" : "RelatedItem"
+         }, {
+            "dataset" : {
+               "referenceName" : "ItemStorageCondition",
+               "type" : "DatasetReference"
+            },
+            "name" : "ItemStorageCondition"
+         } ],
+         "script" : "\n\nsource(output(\n\t\tTEMPB as string,\n\t\tSTOFF as string,\n\t\tMATNR as string,\n\t\tNORMT as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tGEWEI as string,\n\t\tRAUBE as string,\n\t\tMTART as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tSPRAS as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> MAKT\nMARA,MAKT sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinsertable:true,mapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = NORMT,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Item\nMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinsertable:true,mapColumn(\n\t\tRelatedItemSku = STOFF\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RelatedItem\nMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinsertable:true,mapColumn(\n\t\tItemStorageConditionNote = TEMPB\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> ItemStorageCondition"
+      }
+   },
+   "dependsOn" : [ "[concat(variables('factoryId'), '/datasets/MARA')]", "[concat(variables('factoryId'), '/datasets/MAKT')]", "[concat(variables('factoryId'), '/datasets/Item')]", "[concat(variables('factoryId'), '/datasets/RelatedItem')]", "[concat(variables('factoryId'), '/datasets/ItemStorageCondition')]" ]
+}
