@@ -1,0 +1,35 @@
+{
+   "name" : "MAKT",
+   "type" : "Microsoft.DataFactory/factories/datasets",
+   "properties" : {
+      "linkedServiceName" : {
+         "referenceName" : "[parameters('IDWAzureBlobConns')]",
+         "type" : "LinkedServiceReference"
+      },
+      "type" : "DelimitedText",
+      "typeProperties" : {
+         "location" : {
+            "type" : "AzureBlobStorageLocation",
+            "container" : ""
+         },
+         "columnDelimiter" : ",",
+         "escapeChar" : "\\",
+         "firstRowAsHeader" : true,
+         "quoteChar" : "\""
+      },
+      "schema" : [  {
+         "name" : "MATNR",
+         "type" : "String"
+      }, {
+         "name" : "SPRAS",
+         "type" : "String"
+      }, {
+         "name" : "MAKTX",
+         "type" : "String"
+      }, {
+         "name" : "MAKTG",
+         "type" : "String"
+      } ]
+   },
+   "dependsOn" : [ ]
+}
