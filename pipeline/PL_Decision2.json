@@ -71,16 +71,6 @@
                      "type" : "PipelineReference"
                   }
                }
-            } ],
-            "ifFalseActivities" : [ {
-               "name" : "Execute Pipeline2",
-               "type" : "ExecutePipeline",
-               "typeProperties" : {
-                  "pipeline" : {
-                     "referenceName" : "PL_Decision1_Failed_Email1_linkCondition",
-                     "type" : "PipelineReference"
-                  }
-               }
             } ]
          },
          "dependsOn" : [ {
