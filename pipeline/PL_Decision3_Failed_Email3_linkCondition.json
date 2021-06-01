@@ -1,11 +1,11 @@
 
  {
- "name" : "PL_Decision1_Failed_Email1_linkCondition",
+ "name" : "PL_Decision3_Failed_Email3_linkCondition",
  "type" : "Microsoft.DataFactory/factories/pipelines",
  "apiVersion" : "2018-06-01",
  "properties" : {
  "activities" : [ {
- "name" : "Failed_Email1",
+ "name" : "Failed_Email3",
  "type" : "WebActivity",
  "policy" : {
  "timeout" : "7.00:00:00",
@@ -21,13 +21,13 @@
  },
  "headers" :{"Content-Type":"application-json"},
  "method" : "POST",
- "body" : "{\"Subject\": \"Execution Status\",\r\n\"ErrorMessage\": \"Dataload s_load_produc was failed to execute\",\"EmailTo\": \"anusreeks92@gmail.com\"}"
+ "body" : "{\"Subject\": \"Execution Status\",\r\n\"ErrorMessage\": \"Dataload s_load_dep_partyt was failed to execute\",\"EmailTo\": \"anusreeks92@gmail.com\"}"
  },
  "dependsOn" : [ {
- "activity" : "Decision1",
+ "activity" : "Decision3",
  "dependencyConditions" : [ "Succeeded" ]
  } ]
  } ]
  },
- "dependsOn" : [ "[concat(variables('factoryId'), '/dataflows/PL_Decision1_Failed_Email1_linkCondition')]" ]
+ "dependsOn" : [ "[concat(variables('factoryId'), '/dataflows/PL_Decision3_Failed_Email3_linkCondition')]" ]
  }

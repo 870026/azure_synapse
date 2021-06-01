@@ -1,0 +1,68 @@
+{
+   "name" : "PL_wf_load_tasks",
+   "type" : "Microsoft.DataFactory/factories/pipelines",
+   "apiVersion" : "2018-06-01",
+   "properties" : {
+      "activities" : [ {
+         "name" : "s_load_product",
+         "type" : "ExecuteDataFlow",
+         "policy" : {
+            "timeout" : "7.00:00:00",
+            "retry" : 0,
+            "retryIntervalInSeconds" : 30,
+            "secureOutput" : false,
+            "secureInput" : false
+         },
+         "typeProperties" : {
+            "compute" : {
+               "computeType" : "General",
+               "coreCount" : 8
+            },
+            "dataflow" : {
+               "type" : "DataFlowReference",
+               "referenceName" : "DF_load_data"
+            }
+         }
+      }, {
+         "name" : "Decision1",
+         "type" : "IfCondition",
+         "policy" : {
+            "retry" : 0,
+            "retryIntervalInSeconds" : 0,
+            "secureOutput" : false,
+            "secureInput" : false
+         },
+         "typeProperties" : {
+            "expression" : {
+               "value" : "@not(equals(activity('s_load_product').output.runstatus.profile, null))",
+               "type" : "Expression"
+            },
+            "ifTrueActivities" : [ {
+               "name" : "Execute Pipeline6",
+               "type" : "ExecutePipeline",
+               "typeProperties" : {
+                  "pipeline" : {
+                     "referenceName" : "PL_Decision1_s_cust_sumry_linkCondition",
+                     "type" : "PipelineReference"
+                  }
+               }
+            } ],
+            "ifFalseActivities" : [ {
+               "name" : "Execute Pipeline5",
+               "type" : "ExecutePipeline",
+               "typeProperties" : {
+                  "pipeline" : {
+                     "referenceName" : "PL_Decision1_Failed_Email1_linkCondition",
+                     "type" : "PipelineReference"
+                  }
+               }
+            } ]
+         },
+         "dependsOn" : [ {
+            "activity" : "s_load_product",
+            "dependencyConditions" : [ "Completed" ]
+         } ]
+      } ]
+   },
+   "dependsOn" : [ "[concat(variables('factoryId'), '/dataflows/wf_load_tasks')]" ]
+}
