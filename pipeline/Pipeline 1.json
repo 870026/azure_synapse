@@ -17,7 +17,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "Dataflow1",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sink1": {
+								"Data_Destination_Container": "asd",
+								"Data_Destination_Directory": "adf"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
