@@ -1,0 +1,89 @@
+{
+	"name": "AzureSynapseAnalyticsTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "MATNR",
+				"type": "varchar"
+			},
+			{
+				"name": "SPRAS",
+				"type": "varchar"
+			},
+			{
+				"name": "MAKTX",
+				"type": "varchar"
+			},
+			{
+				"name": "MAKTG",
+				"type": "varchar"
+			},
+			{
+				"name": "MTART",
+				"type": "varchar"
+			},
+			{
+				"name": "NORMT",
+				"type": "varchar"
+			},
+			{
+				"name": "GEWEI",
+				"type": "varchar"
+			},
+			{
+				"name": "VOLUM",
+				"type": "decimal",
+				"precision": 20,
+				"scale": 0
+			},
+			{
+				"name": "VOLEH",
+				"type": "varchar"
+			},
+			{
+				"name": "RAUBE",
+				"type": "varchar"
+			},
+			{
+				"name": "ETIFO",
+				"type": "varchar"
+			},
+			{
+				"name": "EAN11",
+				"type": "varchar"
+			},
+			{
+				"name": "LAENG",
+				"type": "decimal",
+				"precision": 20,
+				"scale": 0
+			},
+			{
+				"name": "BREIT",
+				"type": "decimal",
+				"precision": 20,
+				"scale": 0
+			},
+			{
+				"name": "HOEHE",
+				"type": "decimal",
+				"precision": 20,
+				"scale": 0
+			},
+			{
+				"name": "MEABM",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Item"
+		}
+	}
+}
