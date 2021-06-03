@@ -1,0 +1,1549 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "idwdemoworkspace"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"LS_IDWAzureBlobConns_001_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_IDWAzureBlobConns_001'"
+		},
+		"LS_IDW_ADLS_001_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_IDW_ADLS_001'"
+		},
+		"LS_IDW_AZURESYNAPSE_001_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_IDW_AZURESYNAPSE_001'"
+		},
+		"LS_xxx_001_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_xxx_001'"
+		},
+		"idwdemoworkspace-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'idwdemoworkspace-WorkspaceDefaultSqlServer'"
+		},
+		"linkedService1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
+		},
+		"idwdemoworkspace-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://idwadlsstorage.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/BulkCopyfromDB_with_ControlTable')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Copy huge amount of data in bulk from database using external control table to store source table list with partitions for each table.\n\nWhen you want to migrate data from your Azure Synapse Analytics like Oracle server, Netezza server, Teradata server or SQL Server to Azure, you have to load huge amount of data from multiple tables in data sources. In most cases, data has to be further partitioned in each table so that you can load rows with multiple threads in parallel from single table.",
+				"activities": [
+					{
+						"name": "GetPartitionList",
+						"description": "Lookup activity to retrieve the list of partitions stored in the external control table.",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlSource",
+								"sqlReaderQuery": {
+									"value": "select @{pipeline().parameters.Control_Table_Schema_PartitionID} as PartitionID, @{pipeline().parameters.Control_Table_Schema_SourceTableName} as SourceTableName, @{pipeline().parameters.Control_Table_Schema_FilterQuery} as FilterQuery from @{pipeline().parameters.Control_Table_Name}",
+									"type": "Expression"
+								},
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlDatabaseExternal_ControlTable",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.Control_Table_Name",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEachPartition",
+						"description": "ForEach activity to get the partition list from Lookup activity and then iterate each of them to Copy activity. ",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetPartitionList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetPartitionList').output.value",
+								"type": "Expression"
+							},
+							"batchCount": 5,
+							"activities": [
+								{
+									"name": "CopyOnePartition",
+									"description": "Copy activity to copy each partition from source database store to destination store.",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlSource",
+											"sqlReaderQuery": {
+												"value": "@item().FilterQuery",
+												"type": "Expression"
+											},
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink"
+										},
+										"enableStaging": false,
+										"dataIntegrationUnits": 0
+									},
+									"inputs": [
+										{
+											"referenceName": "AzureSqlDatabaseDataSource",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DataDestination",
+											"type": "DatasetReference",
+											"parameters": {
+												"Data_Destination_Container": {
+													"value": "@pipeline().parameters.Data_Destination_Container",
+													"type": "Expression"
+												},
+												"Data_Destination_Directory": {
+													"value": "@pipeline().parameters.Data_Destination_Directory",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"Control_Table_Name": {
+						"type": "String"
+					},
+					"Control_Table_Schema_PartitionID": {
+						"type": "String"
+					},
+					"Control_Table_Schema_SourceTableName": {
+						"type": "String"
+					},
+					"Control_Table_Schema_FilterQuery": {
+						"type": "String"
+					},
+					"Data_Destination_Container": {
+						"type": "String"
+					},
+					"Data_Destination_Directory": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/AzureSqlDatabaseExternal_ControlTable')]",
+				"[concat(variables('workspaceId'), '/datasets/AzureSqlDatabaseDataSource')]",
+				"[concat(variables('workspaceId'), '/datasets/DataDestination')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PL_DataMapping_2')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "DF_DataMapping_2",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_DataMapping_2",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"MARA": {},
+									"MAKT": {},
+									"Item": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "AzureBlobStorage1",
+									"type": "LinkedServiceReference"
+								}
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/DF_DataMapping_2')]",
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Pipeline 1')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {
+										"Data_Destination_Container": "asd",
+										"Data_Destination_Directory": "adf"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/Dataflow1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabaseDataSource')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Connection to your data source store.",
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": ""
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabaseExternal_ControlTable')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "The external control table is used to store the partition list of data source tables.",
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSynapseAnalyticsTable1')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "MATNR",
+						"type": "varchar"
+					},
+					{
+						"name": "SPRAS",
+						"type": "varchar"
+					},
+					{
+						"name": "MAKTX",
+						"type": "varchar"
+					},
+					{
+						"name": "MAKTG",
+						"type": "varchar"
+					},
+					{
+						"name": "MTART",
+						"type": "varchar"
+					},
+					{
+						"name": "NORMT",
+						"type": "varchar"
+					},
+					{
+						"name": "GEWEI",
+						"type": "varchar"
+					},
+					{
+						"name": "VOLUM",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "VOLEH",
+						"type": "varchar"
+					},
+					{
+						"name": "RAUBE",
+						"type": "varchar"
+					},
+					{
+						"name": "ETIFO",
+						"type": "varchar"
+					},
+					{
+						"name": "EAN11",
+						"type": "varchar"
+					},
+					{
+						"name": "LAENG",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "BREIT",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "HOEHE",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "MEABM",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Item"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DataDestination')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Connection to your data destination store.",
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Data_Destination_Container": {
+						"type": "String"
+					},
+					"Data_Destination_Directory": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@{dataset().Data_Destination_Directory}",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@{dataset().Data_Destination_Container}",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Dataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "idwdemoworkspace-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "sales_data.csv",
+						"folderPath": ".",
+						"fileSystem": "adlsdemofilesystem"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ORDERID",
+						"type": "String"
+					},
+					{
+						"name": "ORDERNUMBER",
+						"type": "String"
+					},
+					{
+						"name": "QUANTITYORDERED",
+						"type": "String"
+					},
+					{
+						"name": "PRICEEACH",
+						"type": "String"
+					},
+					{
+						"name": "ORDERLINENUMBER",
+						"type": "String"
+					},
+					{
+						"name": "SALES",
+						"type": "String"
+					},
+					{
+						"name": "ORDERDATE",
+						"type": "String"
+					},
+					{
+						"name": "STATUS",
+						"type": "String"
+					},
+					{
+						"name": "QTR_ID",
+						"type": "String"
+					},
+					{
+						"name": "MONTH_ID",
+						"type": "String"
+					},
+					{
+						"name": "YEAR_ID",
+						"type": "String"
+					},
+					{
+						"name": "PRODUCTLINE",
+						"type": "String"
+					},
+					{
+						"name": "MSRP",
+						"type": "String"
+					},
+					{
+						"name": "PRODUCTCODE",
+						"type": "String"
+					},
+					{
+						"name": "CUSTOMERNAME",
+						"type": "String"
+					},
+					{
+						"name": "PHONE",
+						"type": "String"
+					},
+					{
+						"name": "ADDRESSLINE1",
+						"type": "String"
+					},
+					{
+						"name": "ADDRESSLINE2",
+						"type": "String"
+					},
+					{
+						"name": "CITY",
+						"type": "String"
+					},
+					{
+						"name": "STATE",
+						"type": "String"
+					},
+					{
+						"name": "POSTALCODE",
+						"type": "String"
+					},
+					{
+						"name": "COUNTRY",
+						"type": "String"
+					},
+					{
+						"name": "TERRITORY",
+						"type": "String"
+					},
+					{
+						"name": "CONTACTLASTNAME",
+						"type": "String"
+					},
+					{
+						"name": "CONTACTFIRSTNAME",
+						"type": "String"
+					},
+					{
+						"name": "DEALSIZE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/idwdemoworkspace-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Item')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{}
+				],
+				"typeProperties": {
+					"firstRowAsHeader": false
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/MAKT')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "MANDT",
+						"type": "String"
+					},
+					{
+						"name": "MATNR",
+						"type": "String"
+					},
+					{
+						"name": "SPRAS",
+						"type": "String"
+					},
+					{
+						"name": "MAKTX",
+						"type": "String"
+					},
+					{
+						"name": "MAKTG",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/MARA')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "MANDT",
+						"type": "String"
+					},
+					{
+						"name": "MATNR",
+						"type": "String"
+					},
+					{
+						"name": "VPSTA",
+						"type": "String"
+					},
+					{
+						"name": "PSTAT",
+						"type": "String"
+					},
+					{
+						"name": "MTART",
+						"type": "String"
+					},
+					{
+						"name": "MBRSH",
+						"type": "String"
+					},
+					{
+						"name": "MATKL",
+						"type": "String"
+					},
+					{
+						"name": "MEINS",
+						"type": "String"
+					},
+					{
+						"name": "BSTME",
+						"type": "String"
+					},
+					{
+						"name": "GROES",
+						"type": "String"
+					},
+					{
+						"name": "NORMT",
+						"type": "String"
+					},
+					{
+						"name": "BRGEW",
+						"type": "Boolean"
+					},
+					{
+						"name": "NTGEW",
+						"type": "Boolean"
+					},
+					{
+						"name": "GEWEI",
+						"type": "String"
+					},
+					{
+						"name": "VOLUM",
+						"type": "Boolean"
+					},
+					{
+						"name": "VOLEH",
+						"type": "String"
+					},
+					{
+						"name": "RAUBE",
+						"type": "String"
+					},
+					{
+						"name": "TEMPB",
+						"type": "String"
+					},
+					{
+						"name": "TRAGR",
+						"type": "String"
+					},
+					{
+						"name": "STOFF",
+						"type": "String"
+					},
+					{
+						"name": "ETIAR",
+						"type": "String"
+					},
+					{
+						"name": "ETIFO",
+						"type": "String"
+					},
+					{
+						"name": "EAN11",
+						"type": "String"
+					},
+					{
+						"name": "NUMTP",
+						"type": "String"
+					},
+					{
+						"name": "LAENG",
+						"type": "Boolean"
+					},
+					{
+						"name": "BREIT",
+						"type": "Boolean"
+					},
+					{
+						"name": "HOEHE",
+						"type": "Boolean"
+					},
+					{
+						"name": "MEABM",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSynapseAnalytics1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/LS_IDWAzureBlobConns_001')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_IDWAzureBlobConns_001_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/LS_IDW_ADLS_001')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_IDW_ADLS_001_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/LS_IDW_AZURESYNAPSE_001')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_IDW_AZURESYNAPSE_001_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/LS_xxx_001')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_xxx_001_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/idwdemoworkspace-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('idwdemoworkspace-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/idwdemoworkspace-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('idwdemoworkspace-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/linkedService1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('linkedService1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DF_DataMapping_2')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "MARA",
+								"type": "DatasetReference"
+							},
+							"name": "MARA"
+						},
+						{
+							"dataset": {
+								"referenceName": "MAKT",
+								"type": "DatasetReference"
+							},
+							"name": "MAKT"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Item",
+								"type": "DatasetReference"
+							},
+							"name": "Item"
+						}
+					],
+					"transformations": [
+						{
+							"name": "jnrMARA"
+						}
+					],
+					"script": "source(output(\n\t\tMATNR as string,\n\t\tMTART as string,\n\t\tNORMT as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tSPRAS as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(input(\n\t\tColumn_1 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = NORMT,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Item"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/MARA')]",
+				"[concat(variables('workspaceId'), '/datasets/MAKT')]",
+				"[concat(variables('workspaceId'), '/datasets/Item')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Dataflow1')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Dataset",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DataDestination",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"script": "source(output(\n\t\tORDERID as string,\n\t\tORDERNUMBER as string,\n\t\tQUANTITYORDERED as string,\n\t\tPRICEEACH as string,\n\t\tORDERLINENUMBER as string,\n\t\tSALES as string,\n\t\tORDERDATE as string,\n\t\tSTATUS as string,\n\t\tQTR_ID as string,\n\t\tMONTH_ID as string,\n\t\tYEAR_ID as string,\n\t\tPRODUCTLINE as string,\n\t\tMSRP as string,\n\t\tPRODUCTCODE as string,\n\t\tCUSTOMERNAME as string,\n\t\tPHONE as string,\n\t\tADDRESSLINE1 as string,\n\t\tADDRESSLINE2 as string,\n\t\tCITY as string,\n\t\tSTATE as string,\n\t\tPOSTALCODE as string,\n\t\tCOUNTRY as string,\n\t\tTERRITORY as string,\n\t\tCONTACTLASTNAME as string,\n\t\tCONTACTFIRSTNAME as string,\n\t\tDEALSIZE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/Dataset')]",
+				"[concat(variables('workspaceId'), '/datasets/DataDestination')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateCredential')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE DATABASE SCOPED CREDENTIAL idwadlsstorage_Credential\nWITH\n    IDENTITY = 'idwadlsstorage' ,\n    SECRET = 'l5TVl6o6M4viMAFLv9d3Xw8/fXCsb8kv8y1NRfs1esCZj02Ar/yGp5HO4Fkra9BjHxcxNofOZ9NQe+KskIgV9w=='\n;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateDataSource')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "PolyBase"
+				},
+				"content": {
+					"query": "CREATE EXTERNAL DATA SOURCE idwadlsstorage\nWITH\n( \n    LOCATION = 'abfss://adlsdemofilesystem@idwadlsstorage.dfs.core.windows.net' ,\n    CREDENTIAL = idwadlsstorage_Credential ,\n    TYPE = HADOOP\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateExternalTable')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "PolyBase"
+				},
+				"content": {
+					"query": "CREATE EXTERNAL TABLE dbo.Target1Ext (\nDATA_EFFECTIVE_DATE VARCHAR(255) NULL,\nJOB_RUN_DATE VARCHAR(255) NULL,\nAPPL_MAL_CODE VARCHAR(255) NULL,\nRECORD_COUNT VARCHAR(255) NULL,\nENTITY_NAME VARCHAR(255) NULL,\nPROCESS_FLAG VARCHAR(255) NULL,\nLOAD_START_TIME VARCHAR(255) NULL,\nLOAD_END_TIME VARCHAR(255) NULL\n)\nWITH (\n    LOCATION='Target1.csv',\n    DATA_SOURCE=idwadlsstorage,\n    FILE_FORMAT=csvFile\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateFileFormat')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "PolyBase"
+				},
+				"content": {
+					"query": "CREATE EXTERNAL FILE FORMAT csvFile\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n      FIELD_TERMINATOR = ',',\n      STRING_DELIMITER = '\"',\n      FIRST_ROW = 2,\n      USE_TYPE_DEFAULT = FALSE,\n      ENCODING = 'UTF8' )\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateTarget')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE EXTERNAL TABLE dbo.Target1Ext (\nDATA_EFFECTIVE_DATE VARCHAR(255) NULL,\nJOB_RUN_DATE VARCHAR(255) NULL,\nAPPL_MAL_CODE VARCHAR(255) NULL,\nRECORD_COUNT VARCHAR(255) NULL,\nENTITY_NAME VARCHAR(255) NULL,\nPROCESS_FLAG VARCHAR(255) NULL,\nLOAD_START_TIME VARCHAR(255) NULL,\nLOAD_END_TIME VARCHAR(255) NULL\n)\nWITH (\n    LOCATION='Target1.csv',\n    DATA_SOURCE=idwadlsstorage,\n    FILE_FORMAT=csvFile\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/LoadData')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "PolyBase"
+				},
+				"content": {
+					"query": "CREATE TABLE dbo.Target1\nWITH (   \n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = ROUND_ROBIN\n)\nAS\nSELECT * FROM dbo.Target1Ext;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE dbo.Sales_Data (\"ORDERID\" NVARCHAR(255) , \"ORDERNUMBER\" NVARCHAR(255) , \"QUANTITYORDERED\" NVARCHAR(255) , \"PRICEEACH\" NVARCHAR(255) , \"ORDERLINENUMBER\" NVARCHAR(255) , \"SALES\" NVARCHAR(255) , \"ORDERDATE\" NVARCHAR(255) , \"STATUS\" NVARCHAR(255) , \"QTR_ID\" NVARCHAR(255) , \"MONTH_ID\" NVARCHAR(255) , \"YEAR_ID\" NVARCHAR(255) , \"PRODUCTLINE\" NVARCHAR(255) , \"MSRP\" NVARCHAR(255) , \"PRODUCTCODE\" NVARCHAR(255) , \"CUSTOMERNAME\" NVARCHAR(255) , \"PHONE\" NVARCHAR(255) , \"ADDRESSLINE1\" NVARCHAR(255) , \"ADDRESSLINE2\" NVARCHAR(255) , \"CITY\" NVARCHAR(255) , \"STATE\" NVARCHAR(255) , \"POSTALCODE\" NVARCHAR(255) , \"COUNTRY\" NVARCHAR(255) , \"TERRITORY\" NVARCHAR(255) , \"CONTACTLASTNAME\" NVARCHAR(255) , \"CONTACTFIRSTNAME\" NVARCHAR(255) , \"DEALSIZE\" NVARCHAR(255) ) ",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT * FROM dbo.Target1;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 4')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "select * from dbo.emp_tgt;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/create_data_source')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "POLYBASEInsert"
+				},
+				"content": {
+					"query": "CREATE EXTERNAL DATA SOURCE idwadlsstoragedemo\nWITH\n( \n    LOCATION = 'abfss://adlsdemofilesystem@idwadlsstorage.dfs.core.windows.net' ,\n    CREDENTIAL = idwadlsstorage_key,\n    TYPE = HADOOP\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/create_external_table')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "POLYBASEInsert"
+				},
+				"content": {
+					"query": "CREATE EXTERNAL TABLE dbo.raboempext (\nEMPID VARCHAR(255) NULL,\nNAME VARCHAR(255) NULL,\nDEPT_ID VARCHAR(255) NULL\n)\nWITH (\n    LOCATION='raboemp.csv',\n    DATA_SOURCE=idwadlsstorage,\n    FILE_FORMAT=CSVFileFormat\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/create_file_format')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "POLYBASEInsert"
+				},
+				"content": {
+					"query": "CREATE EXTERNAL FILE FORMAT CSVFileFormat\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n      FIELD_TERMINATOR = ',',\n      STRING_DELIMITER = '\"',\n      FIRST_ROW = 2,\n      USE_TYPE_DEFAULT = FALSE,\n      ENCODING = 'UTF8' )\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/create_key')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "POLYBASEInsert"
+				},
+				"content": {
+					"query": "\nCREATE DATABASE SCOPED CREDENTIAL idwadlsstorage_key\nWITH\n    IDENTITY = 'idwadlsstorageforload' ,\n    SECRET = 'l5TVl6o6M4viMAFLv9d3Xw8/fXCsb8kv8y1NRfs1esCZj02Ar/yGp5HO4Fkra9BjHxcxNofOZ9NQe+KskIgV9w=='\n;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/creatingfileCSV')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE EXTERNAL FILE FORMAT csvFile\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n      FIELD_TERMINATOR = ',',\n      STRING_DELIMITER = '\"',\n      FIRST_ROW = 2,\n      USE_TYPE_DEFAULT = FALSE,\n      ENCODING = 'UTF8' )\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dataStore')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE EXTERNAL DATA SOURCE idwadlsstorage\nWITH\n( \n    LOCATION = 'abfss://adlsdemofilesystem@idwadlsstorage.dfs.core.windows.net' ,\n    CREDENTIAL = idwadlsstorage_Credential ,\n    TYPE = HADOOP\n);\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/loadDataFinal')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE dbo.Target1\nWITH (   \n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = ROUND_ROBIN\n)\nAS\nSELECT * FROM dbo.Target1Ext;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "idwdemosqlpool",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/load_data_table')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "POLYBASEInsert"
+				},
+				"content": {
+					"query": "-- INSERT INTO dbo.raboemp\n-- SELECT * FROM dbo.raboempext ext where ext.empid != raboemp.empid;\nDROP EXTERNAL TABLE dbo.raboempext;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/validation')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "POLYBASEInsert"
+				},
+				"content": {
+					"query": "--  select * from dbo.raboempext;\n-- select * from dbo.raboemp order by EMPID;\nselect * from dbo.hashraboemp order by EMPID;\n-- MERGE dbo.hashraboemp AS TARGET\n-- USING dbo.raboempext AS SOURCE\n-- ON TARGET.EMPID = SOURCE.EMPID\n-- WHEN MATCHED \n-- THEN UPDATE SET TARGET.NAME = SOURCE.NAME, TARGET.DEPT_ID = SOURCE.DEPT_ID\n-- WHEN NOT MATCHED\n-- THEN INSERT (EMPID, NAME, DEPT_ID) VALUES (SOURCE.EMPID, SOURCE.NAME, SOURCE.DEPT_ID);\n\n-- UPDATE TARGET\n-- SET \n--    TARGET.NAME = SOURCE.NAME, TARGET.DEPT_ID = SOURCE.DEPT_ID\n-- FROM dbo.hashraboemp AS TARGET\n-- INNER JOIN\n-- dbo.raboempext AS SOURCE\n-- ON TARGET.EMPID = SOURCE.EMPID;\n\n\n-- CREATE TABLE dbo.hashraboemp\n-- WITH (\n--     CLUSTERED COLUMNSTORE INDEX,\n--     DISTRIBUTION = HASH(EMPID)\n--     )\n-- AS\n-- SELECT * FROM dbo.raboemp;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "idwdemosqlpool",
+						"databaseName": "idwdemosqlpool"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/manifest')]",
+			"type": "Microsoft.Synapse/workspaces/sparkJobDefinitions",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"targetBigDataPool": {
+					"type": "BigDataPoolReference"
+				},
+				"language": "python",
+				"jobProperties": {
+					"name": "manifest",
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					},
+					"args": [],
+					"jars": [],
+					"files": [],
+					"numExecutors": 2
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/wf_load_cust_crdt_sumry')]",
+			"type": "Microsoft.Synapse/workspaces/sparkJobDefinitions",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"targetBigDataPool": {
+					"type": "BigDataPoolReference"
+				},
+				"language": "python",
+				"jobProperties": {
+					"name": "wf_load_cust_crdt_sumry",
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					},
+					"args": [],
+					"jars": [],
+					"files": [],
+					"numExecutors": 2
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/idwdemosqlpool')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"restorePointInTime": "0001-01-01T00:00:00",
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "eastus"
+		}
+	]
+}
