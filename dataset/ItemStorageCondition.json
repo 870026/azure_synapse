@@ -1,0 +1,17 @@
+{
+   "name" : "ItemStorageCondition",
+   "type" : "Microsoft.DataFactory/factories/datasets",
+   "properties" : {
+      "linkedServiceName" : {
+         "referenceName" : "[parameters('LS_IDW_AZURESYNAPSE')]",
+         "type" : "LinkedServiceReference"
+      },
+      "type" : "AzureSqlDWTable",
+      "typeProperties" : {
+         "firstRowAsHeader" : false
+      },
+      "schema" : [ {
+      } ]
+   },
+   "dependsOn" : [ ]
+}
