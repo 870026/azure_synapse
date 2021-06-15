@@ -8,7 +8,10 @@
 		"annotations": [],
 		"type": "AzureSqlDWTable",
 		"schema": [
-			null
+			{
+				"name": "ItemStorageConditionNote",
+				"type": "varchar"
+			}
 		],
 		"typeProperties": {
 			"schema": "dbo",

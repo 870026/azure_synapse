@@ -1,28 +1,28 @@
 {
-   "name" : "DF_DataMapping_1",
-   "type" : "Microsoft.DataFactory/factories/dataflows",
-   "apiVersion" : "2018-06-01",
-   "properties" : {
-      "type" : "MappingDataFlow",
-      "typeProperties" : {
-         "sources" : [ {
-            "dataset" : {
-               "referenceName" : "MARA",
-               "type" : "DatasetReference"
-            },
-            "name" : "MARA"
-         } ],
-         "sinks" : [ {
-            "dataset" : {
-               "referenceName" : "ItemStorageCondition",
-               "type" : "DatasetReference"
-            },
-            "name" : "ItemStorageCondition"
-         } ],
-         "transformations" : [ {
-         } ],
-         "script" : "\n\nsource(output(\n\t\tTEMPB as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> MARA\nMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinsertable:true,mapColumn(\n\t\tItemStorageConditionNote = TEMPB\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> ItemStorageCondition"
-      }
-   },
-   "dependsOn" : [ "[concat(variables('factoryId'), '/datasets/MARA')]", "[concat(variables('factoryId'), '/datasets/ItemStorageCondition')]" ]
+	"name": "DF_DataMapping_1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "MARA",
+						"type": "DatasetReference"
+					},
+					"name": "MARA"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ItemStorageCondition",
+						"type": "DatasetReference"
+					},
+					"name": "ItemStorageCondition"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tTEMPB as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
+		}
+	}
 }
