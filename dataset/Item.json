@@ -1,17 +1,20 @@
 {
-   "name" : "Item",
-   "type" : "Microsoft.DataFactory/factories/datasets",
-   "properties" : {
-      "linkedServiceName" : {
-         "referenceName" : "[parameters('LS_IDW_AZURESYNAPSE')]",
-         "type" : "LinkedServiceReference"
-      },
-      "type" : "AzureSqlDWTable",
-      "typeProperties" : {
-         "firstRowAsHeader" : false
-      },
-      "schema" : [ {
-      } ]
-   },
-   "dependsOn" : [ ]
+	"name": "Item",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			null
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Item",
+			"firstRowAsHeader": false
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
