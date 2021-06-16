@@ -1,0 +1,425 @@
+{
+    "name": "Item",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "sdi-synapse-WorkspaceDefaultSqlServer",
+            "type": "LinkedServiceReference",
+            "parameters": {
+                "DBName": "sdidw"
+            }
+        },
+        "annotations": [],
+        "type": "AzureSqlDWTable",
+        "schema": [
+            {
+                "name": "ItemSku",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ItemName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ItemDescription",
+                "type": "nvarchar"
+            },
+            {
+                "name": "InformationLabelText",
+                "type": "nvarchar"
+            },
+            {
+                "name": "DescriptiveLabelText",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WarningInformationText",
+                "type": "nvarchar"
+            },
+            {
+                "name": "GradeLabelText",
+                "type": "nvarchar"
+            },
+            {
+                "name": "UniversalProductCode",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "EuropeanArticleNumber",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "GlobalTradeItemNumber",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "ItemElectronicProductCode",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "ComponentPartIdentifier",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PluCode",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "EngineeringReferenceNumber",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "CopyrightNumber",
+                "type": "nvarchar"
+            },
+            {
+                "name": "UlControlNumber",
+                "type": "nvarchar"
+            },
+            {
+                "name": "UlFileNumber",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ItemNote",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ProductId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "AssetIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "ItemLength",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemWidth",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemHeight",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "LwhUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemVolume",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemVolumeUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemWeight",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "WeightUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ShelfLifeDays",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MinimumStorageTemperature",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MinimumStorageTemperatureUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MaximumStorageTemperature",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MaximumStorageTemperatureUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MinimumStorageHumidity",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MinimumStorageHumidityUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MaximumStorageHumidity",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "MaximumStorageHumidityUomId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "StandardQuantityUnitOfMeasureId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "StandardCost",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "ListPrice",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "StandardWholesalePrice",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "TargetReturnPrice",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "MarginAmount",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "VerbalBidsRequiredForMinimumAmountRange",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "VerbalBidsRequiredForMaximumAmountRange",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "WrittenBidsRequiredForMinimumAmountRange",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "WrittenBidsRequiredForMaximumAmountRange",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "CompetitiveBidsRequiredForMinimumAmountRange",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "CompetitiveBidsRequiredForMaximumAmountRange",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "LotSizeQuantity",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "MinimumOrderQuantity",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "MinimumStockQuantity",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "ActiveItemInventoryPeriodNumberOfDays",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "PutAwayRulesStatement",
+                "type": "nvarchar"
+            },
+            {
+                "name": "EurobrandIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "StoreMixedIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "StoreToExistingItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "StoreToExistingLotIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "SoleSourceItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "SoleSourceSupplierName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LifedItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "InStockOutOfStockIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "HazardousMaterialIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "ActiveInventoryItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "EligibleForExportIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "CoManagedInventoryItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "RotableItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "ConsignmentItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "SerializedItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "TrackSerialNumberIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "RepairableItemIndicator",
+                "type": "bit"
+            },
+            {
+                "name": "RepairPeriod",
+                "type": "decimal",
+                "precision": 18,
+                "scale": 2
+            },
+            {
+                "name": "ItemIdentificationMethodId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "CommodityTypeId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemSafetyClassificationId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "StandardStorageUnitTypeId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "SecurityLevelId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "VendorId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "FamilyGroupId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "HazardSeverityCategoryId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "DepreciationMethodId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "ItemTypeId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "BarCodeId",
+                "type": "int",
+                "precision": 10
+            }
+        ],
+        "typeProperties": {
+            "schema": "main",
+            "table": "Item"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
