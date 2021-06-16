@@ -231,7 +231,8 @@
 								"linkedService": {
 									"referenceName": "AzureBlobStorage1",
 									"type": "LinkedServiceReference"
-								}
+								},
+								"folderPath": "dif"
 							},
 							"compute": {
 								"coreCount": 8,
@@ -629,9 +630,82 @@
 				"annotations": [],
 				"type": "AzureSqlDWTable",
 				"schema": [
-					{}
+					{
+						"name": "ItemSku",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemSku1",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemDescription",
+						"type": "varchar"
+					},
+					{
+						"name": "DescriptiveLabelText",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemTypeId",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemDescription1",
+						"type": "varchar"
+					},
+					{
+						"name": "WeightUomId",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemVolume",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "ItemVolumeUomId",
+						"type": "varchar"
+					},
+					{
+						"name": "StandardStorageUnitTypeId",
+						"type": "varchar"
+					},
+					{
+						"name": "InformationLabelText",
+						"type": "varchar"
+					},
+					{
+						"name": "GlobalTradeItemNumber",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemLength",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "ItemWidth",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "ItemHeight",
+						"type": "decimal",
+						"precision": 20,
+						"scale": 0
+					},
+					{
+						"name": "LwhUomId",
+						"type": "varchar"
+					}
 				],
 				"typeProperties": {
+					"schema": "dbo",
+					"table": "Item",
 					"firstRowAsHeader": false
 				}
 			},
@@ -644,11 +718,17 @@
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobStorageLocation"
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MAKT.txt",
+						"container": "dif"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -678,18 +758,26 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/MARA')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobStorageLocation"
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MARA2.txt",
+						"container": "dif"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -811,7 +899,9 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/AzureBlobStorage1')]",
@@ -1034,7 +1124,7 @@
 							"name": "jnrMARA"
 						}
 					],
-					"script": "source(output(\n\t\tMATNR as string,\n\t\tMTART as string,\n\t\tNORMT as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tSPRAS as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(input(\n\t\tColumn_1 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = NORMT,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> Item"
+					"script": "source(output(\n\t\tMATNR as string,\n\t\tMTART as string,\n\t\tNORMT as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tSPRAS as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemSku1 as string,\n\t\tItemDescription as string,\n\t\tDescriptiveLabelText as string,\n\t\tItemTypeId as string,\n\t\tItemDescription1 as string,\n\t\tWeightUomId as string,\n\t\tItemVolume as decimal(20,0),\n\t\tItemVolumeUomId as string,\n\t\tStandardStorageUnitTypeId as string,\n\t\tInformationLabelText as string,\n\t\tGlobalTradeItemNumber as string,\n\t\tItemLength as decimal(20,0),\n\t\tItemWidth as decimal(20,0),\n\t\tItemHeight as decimal(20,0),\n\t\tLwhUomId as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = NORMT,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t)) ~> Item"
 				}
 			},
 			"dependsOn": [
