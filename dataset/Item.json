@@ -1,262 +1,350 @@
 {
-   "name" : "Item",
-   "type" : "Microsoft.DataFactory/factories/datasets",
-   "properties" : {
-      "linkedServiceName" : {
-         "referenceName" : "[parameters('LS_IDW_AZURESYNAPSE')]",
-         "type" : "LinkedServiceReference"
-      },
-      "type" : "AzureSqlDWTable",
-      "schema" : [ {
-         "name" : "ItemSku",
-         "type" : "string"
-      }, {
-         "name" : "ItemName",
-         "type" : "string"
-      }, {
-         "name" : "ItemDescription",
-         "type" : "string"
-      }, {
-         "name" : "InformationLabelText",
-         "type" : "string"
-      }, {
-         "name" : "DescriptiveLabelText",
-         "type" : "string"
-      }, {
-         "name" : "WarningInformationText",
-         "type" : "string"
-      }, {
-         "name" : "GradeLabelText",
-         "type" : "string"
-      }, {
-         "name" : "UniversalProductCode",
-         "type" : "Boolean"
-      }, {
-         "name" : "EuropeanArticleNumber",
-         "type" : "Boolean"
-      }, {
-         "name" : "GlobalTradeItemNumber",
-         "type" : "Boolean"
-      }, {
-         "name" : "ItemElectronicProductCode",
-         "type" : "Boolean"
-      }, {
-         "name" : "ComponentPartIdentifier",
-         "type" : "string"
-      }, {
-         "name" : "PluCode",
-         "type" : "Boolean"
-      }, {
-         "name" : "EngineeringReferenceNumber",
-         "type" : "integer"
-      }, {
-         "name" : "CopyrightNumber",
-         "type" : "string"
-      }, {
-         "name" : "UlControlNumber",
-         "type" : "string"
-      }, {
-         "name" : "UlFileNumber",
-         "type" : "string"
-      }, {
-         "name" : "ItemNote",
-         "type" : "string"
-      }, {
-         "name" : "ProductId",
-         "type" : "integer"
-      }, {
-         "name" : "AssetIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "ItemLength",
-         "type" : "integer"
-      }, {
-         "name" : "ItemWidth",
-         "type" : "integer"
-      }, {
-         "name" : "ItemHeight",
-         "type" : "integer"
-      }, {
-         "name" : "LwhUomId",
-         "type" : "integer"
-      }, {
-         "name" : "ItemVolume",
-         "type" : "integer"
-      }, {
-         "name" : "ItemVolumeUomId",
-         "type" : "integer"
-      }, {
-         "name" : "ItemWeight",
-         "type" : "integer"
-      }, {
-         "name" : "WeightUomId",
-         "type" : "integer"
-      }, {
-         "name" : "ShelfLifeDays",
-         "type" : "integer"
-      }, {
-         "name" : "MinimumStorageTemperature",
-         "type" : "integer"
-      }, {
-         "name" : "MinimumStorageTemperatureUomId",
-         "type" : "integer"
-      }, {
-         "name" : "MaximumStorageTemperature",
-         "type" : "integer"
-      }, {
-         "name" : "MaximumStorageTemperatureUomId",
-         "type" : "integer"
-      }, {
-         "name" : "MinimumStorageHumidity",
-         "type" : "integer"
-      }, {
-         "name" : "MinimumStorageHumidityUomId",
-         "type" : "integer"
-      }, {
-         "name" : "MaximumStorageHumidity",
-         "type" : "integer"
-      }, {
-         "name" : "MaximumStorageHumidityUomId",
-         "type" : "integer"
-      }, {
-         "name" : "StandardQuantityUnitOfMeasureId",
-         "type" : "integer"
-      }, {
-         "name" : "StandardCost",
-         "type" : "Boolean"
-      }, {
-         "name" : "ListPrice",
-         "type" : "Boolean"
-      }, {
-         "name" : "StandardWholesalePrice",
-         "type" : "Boolean"
-      }, {
-         "name" : "TargetReturnPrice",
-         "type" : "Boolean"
-      }, {
-         "name" : "MarginAmount",
-         "type" : "Boolean"
-      }, {
-         "name" : "VerbalBidsRequiredForMinimumAmountRange",
-         "type" : "Boolean"
-      }, {
-         "name" : "VerbalBidsRequiredForMaximumAmountRange",
-         "type" : "Boolean"
-      }, {
-         "name" : "WrittenBidsRequiredForMinimumAmountRange",
-         "type" : "Boolean"
-      }, {
-         "name" : "WrittenBidsRequiredForMaximumAmountRange",
-         "type" : "Boolean"
-      }, {
-         "name" : "CompetitiveBidsRequiredForMinimumAmountRange",
-         "type" : "Boolean"
-      }, {
-         "name" : "CompetitiveBidsRequiredForMaximumAmountRange",
-         "type" : "Boolean"
-      }, {
-         "name" : "LotSizeQuantity",
-         "type" : "Boolean"
-      }, {
-         "name" : "MinimumOrderQuantity",
-         "type" : "Boolean"
-      }, {
-         "name" : "MinimumStockQuantity",
-         "type" : "Boolean"
-      }, {
-         "name" : "ActiveItemInventoryPeriodNumberOfDays",
-         "type" : "integer"
-      }, {
-         "name" : "PutAwayRulesStatement",
-         "type" : "string"
-      }, {
-         "name" : "EurobrandIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "StoreMixedIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "StoreToExistingItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "StoreToExistingLotIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "SoleSourceItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "SoleSourceSupplierName",
-         "type" : "string"
-      }, {
-         "name" : "LifedItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "InStockOutOfStockIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "HazardousMaterialIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "ActiveInventoryItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "EligibleForExportIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "CoManagedInventoryItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "RotableItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "ConsignmentItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "SerializedItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "TrackSerialNumberIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "RepairableItemIndicator",
-         "type" : "Boolean"
-      }, {
-         "name" : "RepairPeriod",
-         "type" : "Boolean"
-      }, {
-         "name" : "ItemIdentificationMethodId",
-         "type" : "integer"
-      }, {
-         "name" : "CommodityTypeId",
-         "type" : "integer"
-      }, {
-         "name" : "ItemSafetyClassificationId",
-         "type" : "integer"
-      }, {
-         "name" : "StandardStorageUnitTypeId",
-         "type" : "integer"
-      }, {
-         "name" : "SecurityLevelId",
-         "type" : "integer"
-      }, {
-         "name" : "VendorId",
-         "type" : "integer"
-      }, {
-         "name" : "FamilyGroupId",
-         "type" : "integer"
-      }, {
-         "name" : "HazardSeverityCategoryId",
-         "type" : "integer"
-      }, {
-         "name" : "DepreciationMethodId",
-         "type" : "integer"
-      }, {
-         "name" : "ItemTypeId",
-         "type" : "integer"
-      }, {
-         "name" : "BarCodeId",
-         "type" : "integer"
-      } ]
-   },
-   "dependsOn" : [ ]
+	"name": "Item",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "ItemSku",
+				"type": "string"
+			},
+			{
+				"name": "ItemName",
+				"type": "string"
+			},
+			{
+				"name": "ItemDescription",
+				"type": "string"
+			},
+			{
+				"name": "InformationLabelText",
+				"type": "string"
+			},
+			{
+				"name": "DescriptiveLabelText",
+				"type": "string"
+			},
+			{
+				"name": "WarningInformationText",
+				"type": "string"
+			},
+			{
+				"name": "GradeLabelText",
+				"type": "string"
+			},
+			{
+				"name": "UniversalProductCode",
+				"type": "Boolean"
+			},
+			{
+				"name": "EuropeanArticleNumber",
+				"type": "Boolean"
+			},
+			{
+				"name": "GlobalTradeItemNumber",
+				"type": "Boolean"
+			},
+			{
+				"name": "ItemElectronicProductCode",
+				"type": "Boolean"
+			},
+			{
+				"name": "ComponentPartIdentifier",
+				"type": "string"
+			},
+			{
+				"name": "PluCode",
+				"type": "Boolean"
+			},
+			{
+				"name": "EngineeringReferenceNumber",
+				"type": "integer"
+			},
+			{
+				"name": "CopyrightNumber",
+				"type": "string"
+			},
+			{
+				"name": "UlControlNumber",
+				"type": "string"
+			},
+			{
+				"name": "UlFileNumber",
+				"type": "string"
+			},
+			{
+				"name": "ItemNote",
+				"type": "string"
+			},
+			{
+				"name": "ProductId",
+				"type": "integer"
+			},
+			{
+				"name": "AssetIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "ItemLength",
+				"type": "integer"
+			},
+			{
+				"name": "ItemWidth",
+				"type": "integer"
+			},
+			{
+				"name": "ItemHeight",
+				"type": "integer"
+			},
+			{
+				"name": "LwhUomId",
+				"type": "integer"
+			},
+			{
+				"name": "ItemVolume",
+				"type": "integer"
+			},
+			{
+				"name": "ItemVolumeUomId",
+				"type": "integer"
+			},
+			{
+				"name": "ItemWeight",
+				"type": "integer"
+			},
+			{
+				"name": "WeightUomId",
+				"type": "integer"
+			},
+			{
+				"name": "ShelfLifeDays",
+				"type": "integer"
+			},
+			{
+				"name": "MinimumStorageTemperature",
+				"type": "integer"
+			},
+			{
+				"name": "MinimumStorageTemperatureUomId",
+				"type": "integer"
+			},
+			{
+				"name": "MaximumStorageTemperature",
+				"type": "integer"
+			},
+			{
+				"name": "MaximumStorageTemperatureUomId",
+				"type": "integer"
+			},
+			{
+				"name": "MinimumStorageHumidity",
+				"type": "integer"
+			},
+			{
+				"name": "MinimumStorageHumidityUomId",
+				"type": "integer"
+			},
+			{
+				"name": "MaximumStorageHumidity",
+				"type": "integer"
+			},
+			{
+				"name": "MaximumStorageHumidityUomId",
+				"type": "integer"
+			},
+			{
+				"name": "StandardQuantityUnitOfMeasureId",
+				"type": "integer"
+			},
+			{
+				"name": "StandardCost",
+				"type": "Boolean"
+			},
+			{
+				"name": "ListPrice",
+				"type": "Boolean"
+			},
+			{
+				"name": "StandardWholesalePrice",
+				"type": "Boolean"
+			},
+			{
+				"name": "TargetReturnPrice",
+				"type": "Boolean"
+			},
+			{
+				"name": "MarginAmount",
+				"type": "Boolean"
+			},
+			{
+				"name": "VerbalBidsRequiredForMinimumAmountRange",
+				"type": "Boolean"
+			},
+			{
+				"name": "VerbalBidsRequiredForMaximumAmountRange",
+				"type": "Boolean"
+			},
+			{
+				"name": "WrittenBidsRequiredForMinimumAmountRange",
+				"type": "Boolean"
+			},
+			{
+				"name": "WrittenBidsRequiredForMaximumAmountRange",
+				"type": "Boolean"
+			},
+			{
+				"name": "CompetitiveBidsRequiredForMinimumAmountRange",
+				"type": "Boolean"
+			},
+			{
+				"name": "CompetitiveBidsRequiredForMaximumAmountRange",
+				"type": "Boolean"
+			},
+			{
+				"name": "LotSizeQuantity",
+				"type": "Boolean"
+			},
+			{
+				"name": "MinimumOrderQuantity",
+				"type": "Boolean"
+			},
+			{
+				"name": "MinimumStockQuantity",
+				"type": "Boolean"
+			},
+			{
+				"name": "ActiveItemInventoryPeriodNumberOfDays",
+				"type": "integer"
+			},
+			{
+				"name": "PutAwayRulesStatement",
+				"type": "string"
+			},
+			{
+				"name": "EurobrandIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "StoreMixedIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "StoreToExistingItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "StoreToExistingLotIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "SoleSourceItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "SoleSourceSupplierName",
+				"type": "string"
+			},
+			{
+				"name": "LifedItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "InStockOutOfStockIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "HazardousMaterialIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "ActiveInventoryItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "EligibleForExportIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "CoManagedInventoryItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "RotableItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "ConsignmentItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "SerializedItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "TrackSerialNumberIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "RepairableItemIndicator",
+				"type": "Boolean"
+			},
+			{
+				"name": "RepairPeriod",
+				"type": "Boolean"
+			},
+			{
+				"name": "ItemIdentificationMethodId",
+				"type": "integer"
+			},
+			{
+				"name": "CommodityTypeId",
+				"type": "integer"
+			},
+			{
+				"name": "ItemSafetyClassificationId",
+				"type": "integer"
+			},
+			{
+				"name": "StandardStorageUnitTypeId",
+				"type": "integer"
+			},
+			{
+				"name": "SecurityLevelId",
+				"type": "integer"
+			},
+			{
+				"name": "VendorId",
+				"type": "integer"
+			},
+			{
+				"name": "FamilyGroupId",
+				"type": "integer"
+			},
+			{
+				"name": "HazardSeverityCategoryId",
+				"type": "integer"
+			},
+			{
+				"name": "DepreciationMethodId",
+				"type": "integer"
+			},
+			{
+				"name": "ItemTypeId",
+				"type": "integer"
+			},
+			{
+				"name": "BarCodeId",
+				"type": "integer"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Item"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
