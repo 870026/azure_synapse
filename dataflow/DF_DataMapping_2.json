@@ -1,35 +1,39 @@
 {
-   "name" : "DF_DataMapping_2",
-   "type" : "Microsoft.DataFactory/factories/dataflows",
-   "apiVersion" : "2018-06-01",
-   "properties" : {
-      "type" : "MappingDataFlow",
-      "typeProperties" : {
-         "sources" : [ {
-            "dataset" : {
-               "referenceName" : "MARA",
-               "type" : "DatasetReference"
-            },
-            "name" : "MARA"
-         }, {
-            "dataset" : {
-               "referenceName" : "MAKT",
-               "type" : "DatasetReference"
-            },
-            "name" : "MAKT"
-         } ],
-         "sinks" : [ {
-            "dataset" : {
-               "referenceName" : "Item",
-               "type" : "DatasetReference"
-            },
-            "name" : "Item"
-         } ],
-         "transformations" : [ {
-            "name" : "jnrMARA"
-         } ],
-         "script" : "\n\nsource(output(\n\t\tMATNR as string,\n\t\tMTART as string,\n\t\tNORMT as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> MARA\nsource(output(\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> MAKT\nMAKT,MARA join(MAKT@MATNR == MARA@MATNR,\n joinType:'inner',\n\tbroadcast: 'none')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinsertable:true,mapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = NORMT,\n\t\tInformationLabelText = ETIFO,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Item"
-      }
-   },
-   "dependsOn" : [ "[concat(variables('factoryId'), '/datasets/MARA')]", "[concat(variables('factoryId'), '/datasets/MAKT')]", "[concat(variables('factoryId'), '/datasets/Item')]" ]
+	"name": "DF_DataMapping_2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "MARA",
+						"type": "DatasetReference"
+					},
+					"name": "MARA"
+				},
+				{
+					"dataset": {
+						"referenceName": "DataDestination",
+						"type": "DatasetReference"
+					},
+					"name": "MAKT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Item",
+						"type": "DatasetReference"
+					},
+					"name": "Item"
+				}
+			],
+			"transformations": [
+				{
+					"name": "jnrMARA"
+				}
+			],
+			"script": "source(output(\n\t\tMATNR as string,\n\t\tMTART as string,\n\t\tNORMT as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as any,\n\t\tItemName as any,\n\t\tItemDescription as any,\n\t\tInformationLabelText as any,\n\t\tDescriptiveLabelText as any,\n\t\tWarningInformationText as any,\n\t\tGradeLabelText as any,\n\t\tUniversalProductCode as any,\n\t\tEuropeanArticleNumber as any,\n\t\tGlobalTradeItemNumber as any,\n\t\tItemElectronicProductCode as any,\n\t\tComponentPartIdentifier as any,\n\t\tPluCode as any,\n\t\tEngineeringReferenceNumber as any,\n\t\tCopyrightNumber as any,\n\t\tUlControlNumber as any,\n\t\tUlFileNumber as any,\n\t\tItemNote as any,\n\t\tProductId as any,\n\t\tAssetIndicator as any,\n\t\tItemLength as any,\n\t\tItemWidth as any,\n\t\tItemHeight as any,\n\t\tLwhUomId as any,\n\t\tItemVolume as any,\n\t\tItemVolumeUomId as any,\n\t\tItemWeight as any,\n\t\tWeightUomId as any,\n\t\tShelfLifeDays as any,\n\t\tMinimumStorageTemperature as any,\n\t\tMinimumStorageTemperatureUomId as any,\n\t\tMaximumStorageTemperature as any,\n\t\tMaximumStorageTemperatureUomId as any,\n\t\tMinimumStorageHumidity as any,\n\t\tMinimumStorageHumidityUomId as any,\n\t\tMaximumStorageHumidity as any,\n\t\tMaximumStorageHumidityUomId as any,\n\t\tStandardQuantityUnitOfMeasureId as any,\n\t\tStandardCost as any,\n\t\tListPrice as any,\n\t\tStandardWholesalePrice as any,\n\t\tTargetReturnPrice as any,\n\t\tMarginAmount as any,\n\t\tVerbalBidsRequiredForMinimumAmountRange as any,\n\t\tVerbalBidsRequiredForMaximumAmountRange as any,\n\t\tWrittenBidsRequiredForMinimumAmountRange as any,\n\t\tWrittenBidsRequiredForMaximumAmountRange as any,\n\t\tCompetitiveBidsRequiredForMinimumAmountRange as any,\n\t\tCompetitiveBidsRequiredForMaximumAmountRange as any,\n\t\tLotSizeQuantity as any,\n\t\tMinimumOrderQuantity as any,\n\t\tMinimumStockQuantity as any,\n\t\tActiveItemInventoryPeriodNumberOfDays as any,\n\t\tPutAwayRulesStatement as any,\n\t\tEurobrandIndicator as any,\n\t\tStoreMixedIndicator as any,\n\t\tStoreToExistingItemIndicator as any,\n\t\tStoreToExistingLotIndicator as any,\n\t\tSoleSourceItemIndicator as any,\n\t\tSoleSourceSupplierName as any,\n\t\tLifedItemIndicator as any,\n\t\tInStockOutOfStockIndicator as any,\n\t\tHazardousMaterialIndicator as any,\n\t\tActiveInventoryItemIndicator as any,\n\t\tEligibleForExportIndicator as any,\n\t\tCoManagedInventoryItemIndicator as any,\n\t\tRotableItemIndicator as any,\n\t\tConsignmentItemIndicator as any,\n\t\tSerializedItemIndicator as any,\n\t\tTrackSerialNumberIndicator as any,\n\t\tRepairableItemIndicator as any,\n\t\tRepairPeriod as any,\n\t\tItemIdentificationMethodId as any,\n\t\tCommodityTypeId as any,\n\t\tItemSafetyClassificationId as any,\n\t\tStandardStorageUnitTypeId as any,\n\t\tSecurityLevelId as any,\n\t\tVendorId as any,\n\t\tFamilyGroupId as any,\n\t\tHazardSeverityCategoryId as any,\n\t\tDepreciationMethodId as any,\n\t\tItemTypeId as any,\n\t\tBarCodeId as any\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = NORMT,\n\t\tInformationLabelText = ETIFO,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t)) ~> Item"
+		}
+	}
 }
