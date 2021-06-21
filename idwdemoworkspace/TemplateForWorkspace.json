@@ -246,8 +246,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_DataMapping_2')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
 			]
 		},
 		{
@@ -587,31 +586,31 @@
 				"schema": [
 					{
 						"name": "ItemSku",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemName",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemDescription",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "InformationLabelText",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "DescriptiveLabelText",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "WarningInformationText",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "GradeLabelText",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "UniversalProductCode",
@@ -631,7 +630,7 @@
 					},
 					{
 						"name": "ComponentPartIdentifier",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "PluCode",
@@ -639,27 +638,27 @@
 					},
 					{
 						"name": "EngineeringReferenceNumber",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "CopyrightNumber",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "UlControlNumber",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "UlFileNumber",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemNote",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "ProductId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "AssetIndicator",
@@ -667,75 +666,75 @@
 					},
 					{
 						"name": "ItemLength",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemWidth",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemHeight",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "LwhUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemVolume",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemVolumeUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemWeight",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "WeightUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ShelfLifeDays",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MinimumStorageTemperature",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MinimumStorageTemperatureUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MaximumStorageTemperature",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MaximumStorageTemperatureUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MinimumStorageHumidity",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MinimumStorageHumidityUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MaximumStorageHumidity",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "MaximumStorageHumidityUomId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "StandardQuantityUnitOfMeasureId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "StandardCost",
@@ -795,11 +794,11 @@
 					},
 					{
 						"name": "ActiveItemInventoryPeriodNumberOfDays",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "PutAwayRulesStatement",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "EurobrandIndicator",
@@ -823,7 +822,7 @@
 					},
 					{
 						"name": "SoleSourceSupplierName",
-						"type": "string"
+						"type": "varchar"
 					},
 					{
 						"name": "LifedItemIndicator",
@@ -875,47 +874,47 @@
 					},
 					{
 						"name": "ItemIdentificationMethodId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "CommodityTypeId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemSafetyClassificationId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "StandardStorageUnitTypeId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "SecurityLevelId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "VendorId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "FamilyGroupId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "HazardSeverityCategoryId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "DepreciationMethodId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "ItemTypeId",
-						"type": "integer"
+						"type": "int"
 					},
 					{
 						"name": "BarCodeId",
-						"type": "integer"
+						"type": "int"
 					}
 				],
 				"typeProperties": {
@@ -1339,7 +1338,7 @@
 							"name": "jnrMARA"
 						}
 					],
-					"script": "source(output(\n\t\tMTART as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as any,\n\t\tItemName as any,\n\t\tItemDescription as any,\n\t\tInformationLabelText as any,\n\t\tDescriptiveLabelText as any,\n\t\tWarningInformationText as any,\n\t\tGradeLabelText as any,\n\t\tUniversalProductCode as any,\n\t\tEuropeanArticleNumber as any,\n\t\tGlobalTradeItemNumber as any,\n\t\tItemElectronicProductCode as any,\n\t\tComponentPartIdentifier as any,\n\t\tPluCode as any,\n\t\tEngineeringReferenceNumber as any,\n\t\tCopyrightNumber as any,\n\t\tUlControlNumber as any,\n\t\tUlFileNumber as any,\n\t\tItemNote as any,\n\t\tProductId as any,\n\t\tAssetIndicator as any,\n\t\tItemLength as any,\n\t\tItemWidth as any,\n\t\tItemHeight as any,\n\t\tLwhUomId as any,\n\t\tItemVolume as any,\n\t\tItemVolumeUomId as any,\n\t\tItemWeight as any,\n\t\tWeightUomId as any,\n\t\tShelfLifeDays as any,\n\t\tMinimumStorageTemperature as any,\n\t\tMinimumStorageTemperatureUomId as any,\n\t\tMaximumStorageTemperature as any,\n\t\tMaximumStorageTemperatureUomId as any,\n\t\tMinimumStorageHumidity as any,\n\t\tMinimumStorageHumidityUomId as any,\n\t\tMaximumStorageHumidity as any,\n\t\tMaximumStorageHumidityUomId as any,\n\t\tStandardQuantityUnitOfMeasureId as any,\n\t\tStandardCost as any,\n\t\tListPrice as any,\n\t\tStandardWholesalePrice as any,\n\t\tTargetReturnPrice as any,\n\t\tMarginAmount as any,\n\t\tVerbalBidsRequiredForMinimumAmountRange as any,\n\t\tVerbalBidsRequiredForMaximumAmountRange as any,\n\t\tWrittenBidsRequiredForMinimumAmountRange as any,\n\t\tWrittenBidsRequiredForMaximumAmountRange as any,\n\t\tCompetitiveBidsRequiredForMinimumAmountRange as any,\n\t\tCompetitiveBidsRequiredForMaximumAmountRange as any,\n\t\tLotSizeQuantity as any,\n\t\tMinimumOrderQuantity as any,\n\t\tMinimumStockQuantity as any,\n\t\tActiveItemInventoryPeriodNumberOfDays as any,\n\t\tPutAwayRulesStatement as any,\n\t\tEurobrandIndicator as any,\n\t\tStoreMixedIndicator as any,\n\t\tStoreToExistingItemIndicator as any,\n\t\tStoreToExistingLotIndicator as any,\n\t\tSoleSourceItemIndicator as any,\n\t\tSoleSourceSupplierName as any,\n\t\tLifedItemIndicator as any,\n\t\tInStockOutOfStockIndicator as any,\n\t\tHazardousMaterialIndicator as any,\n\t\tActiveInventoryItemIndicator as any,\n\t\tEligibleForExportIndicator as any,\n\t\tCoManagedInventoryItemIndicator as any,\n\t\tRotableItemIndicator as any,\n\t\tConsignmentItemIndicator as any,\n\t\tSerializedItemIndicator as any,\n\t\tTrackSerialNumberIndicator as any,\n\t\tRepairableItemIndicator as any,\n\t\tRepairPeriod as any,\n\t\tItemIdentificationMethodId as any,\n\t\tCommodityTypeId as any,\n\t\tItemSafetyClassificationId as any,\n\t\tStandardStorageUnitTypeId as any,\n\t\tSecurityLevelId as any,\n\t\tVendorId as any,\n\t\tFamilyGroupId as any,\n\t\tHazardSeverityCategoryId as any,\n\t\tDepreciationMethodId as any,\n\t\tItemTypeId as any,\n\t\tBarCodeId as any\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t)) ~> Item"
+					"script": "source(output(\n\t\tMTART as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemName as string,\n\t\tItemDescription as string,\n\t\tInformationLabelText as string,\n\t\tDescriptiveLabelText as string,\n\t\tWarningInformationText as string,\n\t\tGradeLabelText as string,\n\t\tUniversalProductCode as any,\n\t\tEuropeanArticleNumber as any,\n\t\tGlobalTradeItemNumber as any,\n\t\tItemElectronicProductCode as any,\n\t\tComponentPartIdentifier as string,\n\t\tPluCode as any,\n\t\tEngineeringReferenceNumber as integer,\n\t\tCopyrightNumber as string,\n\t\tUlControlNumber as string,\n\t\tUlFileNumber as string,\n\t\tItemNote as string,\n\t\tProductId as integer,\n\t\tAssetIndicator as any,\n\t\tItemLength as integer,\n\t\tItemWidth as integer,\n\t\tItemHeight as integer,\n\t\tLwhUomId as integer,\n\t\tItemVolume as integer,\n\t\tItemVolumeUomId as integer,\n\t\tItemWeight as integer,\n\t\tWeightUomId as integer,\n\t\tShelfLifeDays as integer,\n\t\tMinimumStorageTemperature as integer,\n\t\tMinimumStorageTemperatureUomId as integer,\n\t\tMaximumStorageTemperature as integer,\n\t\tMaximumStorageTemperatureUomId as integer,\n\t\tMinimumStorageHumidity as integer,\n\t\tMinimumStorageHumidityUomId as integer,\n\t\tMaximumStorageHumidity as integer,\n\t\tMaximumStorageHumidityUomId as integer,\n\t\tStandardQuantityUnitOfMeasureId as integer,\n\t\tStandardCost as any,\n\t\tListPrice as any,\n\t\tStandardWholesalePrice as any,\n\t\tTargetReturnPrice as any,\n\t\tMarginAmount as any,\n\t\tVerbalBidsRequiredForMinimumAmountRange as any,\n\t\tVerbalBidsRequiredForMaximumAmountRange as any,\n\t\tWrittenBidsRequiredForMinimumAmountRange as any,\n\t\tWrittenBidsRequiredForMaximumAmountRange as any,\n\t\tCompetitiveBidsRequiredForMinimumAmountRange as any,\n\t\tCompetitiveBidsRequiredForMaximumAmountRange as any,\n\t\tLotSizeQuantity as any,\n\t\tMinimumOrderQuantity as any,\n\t\tMinimumStockQuantity as any,\n\t\tActiveItemInventoryPeriodNumberOfDays as integer,\n\t\tPutAwayRulesStatement as string,\n\t\tEurobrandIndicator as any,\n\t\tStoreMixedIndicator as any,\n\t\tStoreToExistingItemIndicator as any,\n\t\tStoreToExistingLotIndicator as any,\n\t\tSoleSourceItemIndicator as any,\n\t\tSoleSourceSupplierName as string,\n\t\tLifedItemIndicator as any,\n\t\tInStockOutOfStockIndicator as any,\n\t\tHazardousMaterialIndicator as any,\n\t\tActiveInventoryItemIndicator as any,\n\t\tEligibleForExportIndicator as any,\n\t\tCoManagedInventoryItemIndicator as any,\n\t\tRotableItemIndicator as any,\n\t\tConsignmentItemIndicator as any,\n\t\tSerializedItemIndicator as any,\n\t\tTrackSerialNumberIndicator as any,\n\t\tRepairableItemIndicator as any,\n\t\tRepairPeriod as any,\n\t\tItemIdentificationMethodId as integer,\n\t\tCommodityTypeId as integer,\n\t\tItemSafetyClassificationId as integer,\n\t\tStandardStorageUnitTypeId as integer,\n\t\tSecurityLevelId as integer,\n\t\tVendorId as integer,\n\t\tFamilyGroupId as integer,\n\t\tHazardSeverityCategoryId as integer,\n\t\tDepreciationMethodId as integer,\n\t\tItemTypeId as integer,\n\t\tBarCodeId as integer\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t)) ~> Item"
 				}
 			},
 			"dependsOn": [
