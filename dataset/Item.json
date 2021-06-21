@@ -1,0 +1,91 @@
+{
+    "name": "Item",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "AzureSynapseAnalytics1",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlDWTable",
+        "schema": [
+            {
+                "name": "ItemSku",
+                "type": "varchar"
+            },
+            {
+                "name": "ItemSku1",
+                "type": "varchar"
+            },
+            {
+                "name": "ItemDescription",
+                "type": "varchar"
+            },
+            {
+                "name": "DescriptiveLabelText",
+                "type": "varchar"
+            },
+            {
+                "name": "ItemTypeId",
+                "type": "varchar"
+            },
+            {
+                "name": "ItemDescription1",
+                "type": "varchar"
+            },
+            {
+                "name": "WeightUomId",
+                "type": "varchar"
+            },
+            {
+                "name": "ItemVolume",
+                "type": "decimal",
+                "precision": 20,
+                "scale": 0
+            },
+            {
+                "name": "ItemVolumeUomId",
+                "type": "varchar"
+            },
+            {
+                "name": "StandardStorageUnitTypeId",
+                "type": "varchar"
+            },
+            {
+                "name": "InformationLabelText",
+                "type": "varchar"
+            },
+            {
+                "name": "GlobalTradeItemNumber",
+                "type": "varchar"
+            },
+            {
+                "name": "ItemLength",
+                "type": "decimal",
+                "precision": 20,
+                "scale": 0
+            },
+            {
+                "name": "ItemWidth",
+                "type": "decimal",
+                "precision": 20,
+                "scale": 0
+            },
+            {
+                "name": "ItemHeight",
+                "type": "decimal",
+                "precision": 20,
+                "scale": 0
+            },
+            {
+                "name": "LwhUomId",
+                "type": "varchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "Item",
+            "firstRowAsHeader": false
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
