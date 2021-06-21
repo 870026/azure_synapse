@@ -1,0 +1,60 @@
+{
+   "name" : "Item",
+   "type" : "Microsoft.DataFactory/factories/datasets",
+   "properties" : {
+      "linkedServiceName" : {
+         "referenceName" : "AzureSynapseAnalytics1",
+         "type" : "LinkedServiceReference"
+      },
+      "type" : "AzureSqlDWTable",
+      "typeProperties" : {
+         "firstRowAsHeader" : false,
+         "schema" : "dbo",
+         "table" : "Item"
+      },
+      "schema" : [ {
+         "name" : "ItemSku",
+         "type" : "varchar"
+      }, {
+         "name" : "ItemDescription",
+         "type" : "varchar"
+      }, {
+         "name" : "InformationLabelText",
+         "type" : "varchar"
+      }, {
+         "name" : "DescriptiveLabelText",
+         "type" : "varchar"
+      }, {
+         "name" : "GlobalTradeItemNumber",
+         "type" : "Boolean"
+      }, {
+         "name" : "ItemLength",
+         "type" : "int"
+      }, {
+         "name" : "ItemWidth",
+         "type" : "int"
+      }, {
+         "name" : "ItemHeight",
+         "type" : "int"
+      }, {
+         "name" : "LwhUomId",
+         "type" : "int"
+      }, {
+         "name" : "ItemVolume",
+         "type" : "int"
+      }, {
+         "name" : "ItemVolumeUomId",
+         "type" : "int"
+      }, {
+         "name" : "WeightUomId",
+         "type" : "int"
+      }, {
+         "name" : "StandardStorageUnitTypeId",
+         "type" : "int"
+      }, {
+         "name" : "ItemTypeId",
+         "type" : "int"
+      } ]
+   },
+   "dependsOn" : [ ]
+}
