@@ -1,0 +1,40 @@
+{
+   "name" : "MAKT",
+   "type" : "Microsoft.DataFactory/factories/datasets",
+   "properties" : {
+      "linkedServiceName" : {
+         "referenceName" : "AzureBlobStorage1",
+         "type" : "LinkedServiceReference"
+      },
+      "type" : "DelimitedText",
+      "typeProperties" : {
+         "location" : {
+            "type" : "AzureBlobStorageLocation",
+            "fileName" : "MAKT.txt",
+            "container" : "dif",
+            "fileSystem" : "dif"
+         },
+         "columnDelimiter" : ",",
+         "escapeChar" : "\\",
+         "firstRowAsHeader" : true,
+         "quoteChar" : "\""
+      },
+      "schema" : [ {
+         "name" : "MANDT",
+         "type" : "String"
+      }, {
+         "name" : "MATNR",
+         "type" : "String"
+      }, {
+         "name" : "SPRAS",
+         "type" : "String"
+      }, {
+         "name" : "MAKTX",
+         "type" : "String"
+      }, {
+         "name" : "MAKTG",
+         "type" : "String"
+      } ]
+   },
+   "dependsOn" : [ ]
+}
