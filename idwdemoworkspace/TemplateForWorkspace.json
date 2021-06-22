@@ -199,6 +199,58 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/PL_DataMapping_2')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "DF_DataMapping_2",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_DataMapping_2",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"MARA": {},
+									"MAKT": {},
+									"Item1": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "AzureBlobStorage1",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dif"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/DF_DataMapping_2')]",
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabaseDataSource')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -522,6 +574,275 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Item1')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "ItemSku",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "ItemDescription",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "InformationLabelText",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "DescriptiveLabelText",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "GlobalTradeItemNumber",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ItemLength",
+						"type": "INT"
+					},
+					{
+						"name": "ItemWidth",
+						"type": "INT"
+					},
+					{
+						"name": "ItemHeight",
+						"type": "INT"
+					},
+					{
+						"name": "LwhUomId",
+						"type": "INT"
+					},
+					{
+						"name": "ItemVolume",
+						"type": "INT"
+					},
+					{
+						"name": "ItemVolumeUomId",
+						"type": "INT"
+					},
+					{
+						"name": "WeightUomId",
+						"type": "INT"
+					},
+					{
+						"name": "StandardStorageUnitTypeId",
+						"type": "INT"
+					},
+					{
+						"name": "ItemTypeId",
+						"type": "INT"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Item",
+					"firstRowAsHeader": false
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/MAKT')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MAKT.txt",
+						"container": "dif"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "MANDT",
+						"type": "String"
+					},
+					{
+						"name": "MATNR",
+						"type": "String"
+					},
+					{
+						"name": "SPRAS",
+						"type": "String"
+					},
+					{
+						"name": "MAKTX",
+						"type": "String"
+					},
+					{
+						"name": "MAKTG",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/MARA')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MARA2.txt",
+						"container": "dif"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "MANDT",
+						"type": "String"
+					},
+					{
+						"name": "MATNR",
+						"type": "String"
+					},
+					{
+						"name": "VPSTA",
+						"type": "String"
+					},
+					{
+						"name": "PSTAT",
+						"type": "String"
+					},
+					{
+						"name": "MTART",
+						"type": "String"
+					},
+					{
+						"name": "MBRSH",
+						"type": "String"
+					},
+					{
+						"name": "MATKL",
+						"type": "String"
+					},
+					{
+						"name": "MEINS",
+						"type": "String"
+					},
+					{
+						"name": "BSTME",
+						"type": "String"
+					},
+					{
+						"name": "GROES",
+						"type": "String"
+					},
+					{
+						"name": "NORMT",
+						"type": "String"
+					},
+					{
+						"name": "BRGEW",
+						"type": "Boolean"
+					},
+					{
+						"name": "NTGEW",
+						"type": "Boolean"
+					},
+					{
+						"name": "GEWEI",
+						"type": "String"
+					},
+					{
+						"name": "VOLUM",
+						"type": "Boolean"
+					},
+					{
+						"name": "VOLEH",
+						"type": "String"
+					},
+					{
+						"name": "RAUBE",
+						"type": "String"
+					},
+					{
+						"name": "TEMPB",
+						"type": "String"
+					},
+					{
+						"name": "TRAGR",
+						"type": "String"
+					},
+					{
+						"name": "STOFF",
+						"type": "String"
+					},
+					{
+						"name": "ETIAR",
+						"type": "String"
+					},
+					{
+						"name": "ETIFO",
+						"type": "String"
+					},
+					{
+						"name": "EAN11",
+						"type": "String"
+					},
+					{
+						"name": "NUMTP",
+						"type": "String"
+					},
+					{
+						"name": "LAENG",
+						"type": "Boolean"
+					},
+					{
+						"name": "BREIT",
+						"type": "Boolean"
+					},
+					{
+						"name": "HOEHE",
+						"type": "Boolean"
+					},
+					{
+						"name": "MEABM",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureBlobStorage1')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -704,6 +1025,52 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DF_DataMapping_2')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "MARA",
+								"type": "DatasetReference"
+							},
+							"name": "MARA"
+						},
+						{
+							"dataset": {
+								"referenceName": "MAKT",
+								"type": "DatasetReference"
+							},
+							"name": "MAKT"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Item1",
+								"type": "DatasetReference"
+							},
+							"name": "Item1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "jnrMARA"
+						}
+					],
+					"script": "source(output(\n\t\tMTART as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemDescription as string,\n\t\tInformationLabelText as string,\n\t\tDescriptiveLabelText as string,\n\t\tGlobalTradeItemNumber as string,\n\t\tItemLength as integer,\n\t\tItemWidth as integer,\n\t\tItemHeight as integer,\n\t\tLwhUomId as integer,\n\t\tItemVolume as integer,\n\t\tItemVolumeUomId as integer,\n\t\tWeightUomId as integer,\n\t\tStandardStorageUnitTypeId as integer,\n\t\tItemTypeId as integer\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t)) ~> Item1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/MARA')]",
+				"[concat(variables('workspaceId'), '/datasets/MAKT')]",
+				"[concat(variables('workspaceId'), '/datasets/Item1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/Dataflow1')]",
