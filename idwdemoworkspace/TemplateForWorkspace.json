@@ -587,111 +587,111 @@
 				"schema": [
 					{
 						"name": "ItemSku",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemDescription",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "DescriptiveLabelText",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemIndustryGroup",
-						"type": "CHAR"
+						"type": "char"
 					},
 					{
 						"name": "ItemGroupID",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "BaseUOMID",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "PurchaseOrderUOMID",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "SizeDimension",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemWeightGross",
-						"type": "DECIMAL",
+						"type": "decimal",
 						"precision": 13,
 						"scale": 0
 					},
 					{
 						"name": "ItemWeightNet",
-						"type": "DECIMAL",
+						"type": "decimal",
 						"precision": 13,
 						"scale": 0
 					},
 					{
 						"name": "ItemTypeId",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "WeightUomId",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "ItemVolume",
-						"type": "DECIMAL",
+						"type": "decimal",
 						"precision": 13,
 						"scale": 0
 					},
 					{
 						"name": "ItemVolumeUomId",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "StandardStorageUnitTypeId",
-						"type": "CHAR"
+						"type": "char"
 					},
 					{
 						"name": "TransporationGroupTypeId",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "GradeLabelText",
-						"type": "CHAR"
+						"type": "char"
 					},
 					{
 						"name": "InformationLabelText",
-						"type": "CHAR"
+						"type": "char"
 					},
 					{
 						"name": "GlobalTradeItemNumber",
-						"type": "VARCHAR"
+						"type": "varchar"
 					},
 					{
 						"name": "GlobalTradeItemNumberCategory",
-						"type": "CHAR"
+						"type": "char"
 					},
 					{
 						"name": "ItemLength",
-						"type": "DECIMAL",
+						"type": "decimal",
 						"precision": 13,
 						"scale": 0
 					},
 					{
 						"name": "ItemWidth",
-						"type": "DECIMAL",
+						"type": "decimal",
 						"precision": 13,
 						"scale": 0
 					},
 					{
 						"name": "ItemHeight",
-						"type": "DECIMAL",
+						"type": "decimal",
 						"precision": 13,
 						"scale": 0
 					},
 					{
 						"name": "LwhUomId",
-						"type": "VARCHAR"
+						"type": "varchar"
 					}
 				],
 				"typeProperties": {
@@ -1115,7 +1115,7 @@
 							"name": "jnrMARA"
 						}
 					],
-					"script": "source(output(\n\t\tMTART as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemDescription as string,\n\t\tDescriptiveLabelText as string,\n\t\tItemIndustryGroup as string,\n\t\tItemGroupID as string,\n\t\tBaseUOMID as string,\n\t\tPurchaseOrderUOMID as string,\n\t\tSizeDimension as string,\n\t\tItemWeightGross as decimal(13,0),\n\t\tItemWeightNet as decimal(13,0),\n\t\tItemTypeId as string,\n\t\tWeightUomId as string,\n\t\tItemVolume as decimal(13,0),\n\t\tItemVolumeUomId as string,\n\t\tStandardStorageUnitTypeId as string,\n\t\tTransporationGroupTypeId as string,\n\t\tGradeLabelText as string,\n\t\tInformationLabelText as string,\n\t\tGlobalTradeItemNumber as string,\n\t\tGlobalTradeItemNumberCategory as string,\n\t\tItemLength as decimal(13,0),\n\t\tItemWidth as decimal(13,0),\n\t\tItemHeight as decimal(13,0),\n\t\tLwhUomId as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tItemTypeId = MTART,\n\t\tWeightUomId = GEWEI,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tInformationLabelText = ETIFO,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM\n\t)) ~> ItemNew"
+					"script": "source(output(\n\t\tMTART as string,\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemDescription as string,\n\t\tDescriptiveLabelText as string,\n\t\tItemIndustryGroup as string,\n\t\tItemGroupID as string,\n\t\tBaseUOMID as string,\n\t\tPurchaseOrderUOMID as string,\n\t\tSizeDimension as string,\n\t\tItemWeightGross as decimal(13,0),\n\t\tItemWeightNet as decimal(13,0),\n\t\tItemTypeId as string,\n\t\tWeightUomId as string,\n\t\tItemVolume as decimal(13,0),\n\t\tItemVolumeUomId as string,\n\t\tStandardStorageUnitTypeId as string,\n\t\tTransporationGroupTypeId as string,\n\t\tGradeLabelText as string,\n\t\tInformationLabelText as string,\n\t\tGlobalTradeItemNumber as string,\n\t\tGlobalTradeItemNumberCategory as string,\n\t\tItemLength as decimal(13,0),\n\t\tItemWidth as decimal(13,0),\n\t\tItemHeight as decimal(13,0),\n\t\tLwhUomId as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tItemTypeId = MTART,\n\t\tWeightUomId = GEWEI,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tInformationLabelText = ETIFO,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM\n\t)) ~> ItemNew"
 				}
 			},
 			"dependsOn": [
