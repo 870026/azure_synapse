@@ -10,111 +10,111 @@
 		"schema": [
 			{
 				"name": "ItemSku",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "ItemDescription",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "DescriptiveLabelText",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "ItemIndustryGroup",
-				"type": "CHAR"
+				"type": "char"
 			},
 			{
 				"name": "ItemGroupID",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "BaseUOMID",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "PurchaseOrderUOMID",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "SizeDimension",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "ItemWeightGross",
-				"type": "DECIMAL",
+				"type": "decimal",
 				"precision": 13,
 				"scale": 0
 			},
 			{
 				"name": "ItemWeightNet",
-				"type": "DECIMAL",
+				"type": "decimal",
 				"precision": 13,
 				"scale": 0
 			},
 			{
 				"name": "ItemTypeId",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "WeightUomId",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "ItemVolume",
-				"type": "DECIMAL",
+				"type": "decimal",
 				"precision": 13,
 				"scale": 0
 			},
 			{
 				"name": "ItemVolumeUomId",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "StandardStorageUnitTypeId",
-				"type": "CHAR"
+				"type": "char"
 			},
 			{
 				"name": "TransporationGroupTypeId",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "GradeLabelText",
-				"type": "CHAR"
+				"type": "char"
 			},
 			{
 				"name": "InformationLabelText",
-				"type": "CHAR"
+				"type": "char"
 			},
 			{
 				"name": "GlobalTradeItemNumber",
-				"type": "VARCHAR"
+				"type": "varchar"
 			},
 			{
 				"name": "GlobalTradeItemNumberCategory",
-				"type": "CHAR"
+				"type": "char"
 			},
 			{
 				"name": "ItemLength",
-				"type": "DECIMAL",
+				"type": "decimal",
 				"precision": 13,
 				"scale": 0
 			},
 			{
 				"name": "ItemWidth",
-				"type": "DECIMAL",
+				"type": "decimal",
 				"precision": 13,
 				"scale": 0
 			},
 			{
 				"name": "ItemHeight",
-				"type": "DECIMAL",
+				"type": "decimal",
 				"precision": 13,
 				"scale": 0
 			},
 			{
 				"name": "LwhUomId",
-				"type": "VARCHAR"
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
