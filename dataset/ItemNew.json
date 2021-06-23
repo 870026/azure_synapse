@@ -1,90 +1,115 @@
 {
-   "name" : "ItemNew",
-   "type" : "Microsoft.DataFactory/factories/datasets",
-   "properties" : {
-      "linkedServiceName" : {
-         "referenceName" : "LS_IDW_AZURESYNAPSE",
-         "type" : "LinkedServiceReference"
-      },
-      "type" : "AzureSqlDWTable",
-      "typeProperties" : {
-         "firstRowAsHeader" : false,
-         "schema" : "main",
-         "table" : "ItemNew"
-      },
-      "schema" : [ {
-         "name" : "ItemSku",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "ItemDescription",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "DescriptiveLabelText",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "ItemIndustryGroup",
-         "type" : "CHAR"
-      }, {
-         "name" : "ItemGroupID",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "BaseUOMID",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "PurchaseOrderUOMID",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "SizeDimension",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "ItemWeightGross",
-         "type" : "DECIMAL"
-      }, {
-         "name" : "ItemWeightNet",
-         "type" : "DECIMAL"
-      }, {
-         "name" : "ItemTypeId",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "WeightUomId",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "ItemVolume",
-         "type" : "DECIMAL"
-      }, {
-         "name" : "ItemVolumeUomId",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "StandardStorageUnitTypeId",
-         "type" : "CHAR"
-      }, {
-         "name" : "TransporationGroupTypeId",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "GradeLabelText",
-         "type" : "CHAR"
-      }, {
-         "name" : "InformationLabelText",
-         "type" : "CHAR"
-      }, {
-         "name" : "GlobalTradeItemNumber",
-         "type" : "VARCHAR"
-      }, {
-         "name" : "GlobalTradeItemNumberCategory",
-         "type" : "CHAR"
-      }, {
-         "name" : "ItemLength",
-         "type" : "DECIMAL"
-      }, {
-         "name" : "ItemWidth",
-         "type" : "DECIMAL"
-      }, {
-         "name" : "ItemHeight",
-         "type" : "DECIMAL"
-      }, {
-         "name" : "LwhUomId",
-         "type" : "VARCHAR"
-      } ]
-   },
-   "dependsOn" : [ ]
+	"name": "ItemNew",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "ItemSku",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ItemDescription",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DescriptiveLabelText",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ItemIndustryGroup",
+				"type": "CHAR"
+			},
+			{
+				"name": "ItemGroupID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "BaseUOMID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PurchaseOrderUOMID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "SizeDimension",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ItemWeightGross",
+				"type": "DECIMAL"
+			},
+			{
+				"name": "ItemWeightNet",
+				"type": "DECIMAL"
+			},
+			{
+				"name": "ItemTypeId",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "WeightUomId",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ItemVolume",
+				"type": "DECIMAL"
+			},
+			{
+				"name": "ItemVolumeUomId",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "StandardStorageUnitTypeId",
+				"type": "CHAR"
+			},
+			{
+				"name": "TransporationGroupTypeId",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "GradeLabelText",
+				"type": "CHAR"
+			},
+			{
+				"name": "InformationLabelText",
+				"type": "CHAR"
+			},
+			{
+				"name": "GlobalTradeItemNumber",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "GlobalTradeItemNumberCategory",
+				"type": "CHAR"
+			},
+			{
+				"name": "ItemLength",
+				"type": "DECIMAL"
+			},
+			{
+				"name": "ItemWidth",
+				"type": "DECIMAL"
+			},
+			{
+				"name": "ItemHeight",
+				"type": "DECIMAL"
+			},
+			{
+				"name": "LwhUomId",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ItemNew",
+			"firstRowAsHeader": false
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
