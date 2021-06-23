@@ -22,7 +22,7 @@
 			},
 			{
 				"name": "ItemIndustryGroup",
-				"type": "char"
+				"type": "varchar"
 			},
 			{
 				"name": "ItemGroupID",
@@ -72,7 +72,7 @@
 			},
 			{
 				"name": "StandardStorageUnitTypeId",
-				"type": "char"
+				"type": "varchar"
 			},
 			{
 				"name": "TransporationGroupTypeId",
@@ -80,11 +80,11 @@
 			},
 			{
 				"name": "GradeLabelText",
-				"type": "char"
+				"type": "varchar"
 			},
 			{
 				"name": "InformationLabelText",
-				"type": "char"
+				"type": "varchar"
 			},
 			{
 				"name": "GlobalTradeItemNumber",
@@ -92,7 +92,7 @@
 			},
 			{
 				"name": "GlobalTradeItemNumberCategory",
-				"type": "char"
+				"type": "varchar"
 			},
 			{
 				"name": "ItemLength",
@@ -119,7 +119,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "ItemNew",
+			"table": "ItemTest",
 			"firstRowAsHeader": false
 		}
 	},
