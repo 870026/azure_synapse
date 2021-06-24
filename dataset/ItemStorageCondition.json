@@ -1,0 +1,27 @@
+{
+   "name" : "ItemStorageCondition",
+   "type" : "Microsoft.DataFactory/factories/datasets",
+   "properties" : {
+      "linkedServiceName" : {
+         "referenceName" : "LS_IDW_AZURESYNAPSE",
+         "type" : "LinkedServiceReference"
+      },
+      "type" : "AzureSqlDWTable",
+      "typeProperties" : {
+         "firstRowAsHeader" : false,
+         "schema" : "main",
+         "table" : "ItemStorageCondition"
+      },
+      "schema" : [ {
+         "name" : "ItemSku",
+         "type" : "string"
+      }, {
+         "name" : "StorageConditionId",
+         "type" : "integer"
+      }, {
+         "name" : "ItemStorageConditionNote",
+         "type" : "string"
+      } ]
+   },
+   "dependsOn" : [ ]
+}
