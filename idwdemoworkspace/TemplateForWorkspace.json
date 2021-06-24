@@ -199,6 +199,58 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/PL_Item_ProductData')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "DF_Item_ProductData",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Item_ProductData",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"MARA": {},
+									"MAKT": {},
+									"Item": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "AzureBlobStorage1",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dif"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/DF_Item_ProductData')]",
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabaseDataSource')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -522,6 +574,623 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Item')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "ItemSku",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "ItemName",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "ItemDescription",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "InformationLabelText",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "DescriptiveLabelText",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "WarningInformationText",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "GradeLabelText",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "UniversalProductCode",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "EuropeanArticleNumber",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "GlobalTradeItemNumber",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "ItemElectronicProductCode",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "ComponentPartIdentifier",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "PluCode",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "EngineeringReferenceNumber",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "CopyrightNumber",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "UlControlNumber",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "UlFileNumber",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "ItemNote",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "ProductId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "AssetIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "ItemLength",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemWidth",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemHeight",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "LwhUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemVolume",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemVolumeUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemWeight",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "WeightUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ShelfLifeDays",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MinimumStorageTemperature",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MinimumStorageTemperatureUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MaximumStorageTemperature",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MaximumStorageTemperatureUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MinimumStorageHumidity",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MinimumStorageHumidityUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MaximumStorageHumidity",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "MaximumStorageHumidityUomId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "StandardQuantityUnitOfMeasureId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "StandardCost",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "ListPrice",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "StandardWholesalePrice",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "TargetReturnPrice",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "MarginAmount",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "VerbalBidsRequiredForMinimumAmountRange",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "VerbalBidsRequiredForMaximumAmountRange",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "WrittenBidsRequiredForMinimumAmountRange",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "WrittenBidsRequiredForMaximumAmountRange",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "CompetitiveBidsRequiredForMinimumAmountRange",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "CompetitiveBidsRequiredForMaximumAmountRange",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "LotSizeQuantity",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "MinimumOrderQuantity",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "MinimumStockQuantity",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "ActiveItemInventoryPeriodNumberOfDays",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "PutAwayRulesStatement",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "EurobrandIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "StoreMixedIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "StoreToExistingItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "StoreToExistingLotIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "SoleSourceItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "SoleSourceSupplierName",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "LifedItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "InStockOutOfStockIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "HazardousMaterialIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "ActiveInventoryItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "EligibleForExportIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "CoManagedInventoryItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "RotableItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "ConsignmentItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "SerializedItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "TrackSerialNumberIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "RepairableItemIndicator",
+						"type": "BIT"
+					},
+					{
+						"name": "RepairPeriod",
+						"type": "DECIMAL",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "ItemIdentificationMethodId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "CommodityTypeId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemSafetyClassificationId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "StandardStorageUnitTypeId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "SecurityLevelId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "VendorId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "FamilyGroupId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "HazardSeverityCategoryId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "DepreciationMethodId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "BarCodeId",
+						"type": "INT",
+						"precision": 10
+					},
+					{
+						"name": "ItemTypeId",
+						"type": "INT",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ItemTest",
+					"firstRowAsHeader": false
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/MAKT')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MAKTnew.csv",
+						"container": "dif"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "MANDT",
+						"type": "String"
+					},
+					{
+						"name": "MATNR",
+						"type": "String"
+					},
+					{
+						"name": "SPRAS",
+						"type": "String"
+					},
+					{
+						"name": "MAKTX",
+						"type": "String"
+					},
+					{
+						"name": "MAKTG",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/MARA')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MARA2new.csv",
+						"container": "dif"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "MANDT",
+						"type": "String"
+					},
+					{
+						"name": "MATNR",
+						"type": "String"
+					},
+					{
+						"name": "VPSTA",
+						"type": "String"
+					},
+					{
+						"name": "PSTAT",
+						"type": "String"
+					},
+					{
+						"name": "MTART",
+						"type": "String"
+					},
+					{
+						"name": "MBRSH",
+						"type": "String"
+					},
+					{
+						"name": "MATKL",
+						"type": "String"
+					},
+					{
+						"name": "MEINS",
+						"type": "String"
+					},
+					{
+						"name": "BSTME",
+						"type": "String"
+					},
+					{
+						"name": "GROES",
+						"type": "String"
+					},
+					{
+						"name": "NORMT",
+						"type": "String"
+					},
+					{
+						"name": "BRGEW",
+						"type": "Boolean"
+					},
+					{
+						"name": "NTGEW",
+						"type": "Boolean"
+					},
+					{
+						"name": "GEWEI",
+						"type": "String"
+					},
+					{
+						"name": "VOLUM",
+						"type": "Boolean"
+					},
+					{
+						"name": "VOLEH",
+						"type": "String"
+					},
+					{
+						"name": "RAUBE",
+						"type": "String"
+					},
+					{
+						"name": "TEMPB",
+						"type": "String"
+					},
+					{
+						"name": "TRAGR",
+						"type": "String"
+					},
+					{
+						"name": "STOFF",
+						"type": "String"
+					},
+					{
+						"name": "ETIAR",
+						"type": "String"
+					},
+					{
+						"name": "ETIFO",
+						"type": "String"
+					},
+					{
+						"name": "EAN11",
+						"type": "String"
+					},
+					{
+						"name": "NUMTP",
+						"type": "String"
+					},
+					{
+						"name": "LAENG",
+						"type": "Boolean"
+					},
+					{
+						"name": "BREIT",
+						"type": "Boolean"
+					},
+					{
+						"name": "HOEHE",
+						"type": "Boolean"
+					},
+					{
+						"name": "MEABM",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureBlobStorage1')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -704,6 +1373,52 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DF_Item_ProductData')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "MARA",
+								"type": "DatasetReference"
+							},
+							"name": "MARA"
+						},
+						{
+							"dataset": {
+								"referenceName": "MAKT",
+								"type": "DatasetReference"
+							},
+							"name": "MAKT"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Item",
+								"type": "DatasetReference"
+							},
+							"name": "Item"
+						}
+					],
+					"transformations": [
+						{
+							"name": "jnrMARA"
+						}
+					],
+					"script": "source(output(\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMATNR as string,\n\t\tMTART as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemName as string,\n\t\tItemDescription as string,\n\t\tInformationLabelText as string,\n\t\tDescriptiveLabelText as string,\n\t\tWarningInformationText as string,\n\t\tGradeLabelText as string,\n\t\tUniversalProductCode as decimal(18,2),\n\t\tEuropeanArticleNumber as decimal(18,2),\n\t\tGlobalTradeItemNumber as decimal(18,2),\n\t\tItemElectronicProductCode as decimal(18,2),\n\t\tComponentPartIdentifier as string,\n\t\tPluCode as decimal(18,2),\n\t\tEngineeringReferenceNumber as integer,\n\t\tCopyrightNumber as string,\n\t\tUlControlNumber as string,\n\t\tUlFileNumber as string,\n\t\tItemNote as string,\n\t\tProductId as integer,\n\t\tAssetIndicator as boolean,\n\t\tItemLength as integer,\n\t\tItemWidth as integer,\n\t\tItemHeight as integer,\n\t\tLwhUomId as integer,\n\t\tItemVolume as integer,\n\t\tItemVolumeUomId as integer,\n\t\tItemWeight as integer,\n\t\tWeightUomId as integer,\n\t\tShelfLifeDays as integer,\n\t\tMinimumStorageTemperature as integer,\n\t\tMinimumStorageTemperatureUomId as integer,\n\t\tMaximumStorageTemperature as integer,\n\t\tMaximumStorageTemperatureUomId as integer,\n\t\tMinimumStorageHumidity as integer,\n\t\tMinimumStorageHumidityUomId as integer,\n\t\tMaximumStorageHumidity as integer,\n\t\tMaximumStorageHumidityUomId as integer,\n\t\tStandardQuantityUnitOfMeasureId as integer,\n\t\tStandardCost as decimal(18,2),\n\t\tListPrice as decimal(18,2),\n\t\tStandardWholesalePrice as decimal(18,2),\n\t\tTargetReturnPrice as decimal(18,2),\n\t\tMarginAmount as decimal(18,2),\n\t\tVerbalBidsRequiredForMinimumAmountRange as decimal(18,2),\n\t\tVerbalBidsRequiredForMaximumAmountRange as decimal(18,2),\n\t\tWrittenBidsRequiredForMinimumAmountRange as decimal(18,2),\n\t\tWrittenBidsRequiredForMaximumAmountRange as decimal(18,2),\n\t\tCompetitiveBidsRequiredForMinimumAmountRange as decimal(18,2),\n\t\tCompetitiveBidsRequiredForMaximumAmountRange as decimal(18,2),\n\t\tLotSizeQuantity as decimal(18,2),\n\t\tMinimumOrderQuantity as decimal(18,2),\n\t\tMinimumStockQuantity as decimal(18,2),\n\t\tActiveItemInventoryPeriodNumberOfDays as integer,\n\t\tPutAwayRulesStatement as string,\n\t\tEurobrandIndicator as boolean,\n\t\tStoreMixedIndicator as boolean,\n\t\tStoreToExistingItemIndicator as boolean,\n\t\tStoreToExistingLotIndicator as boolean,\n\t\tSoleSourceItemIndicator as boolean,\n\t\tSoleSourceSupplierName as string,\n\t\tLifedItemIndicator as boolean,\n\t\tInStockOutOfStockIndicator as boolean,\n\t\tHazardousMaterialIndicator as boolean,\n\t\tActiveInventoryItemIndicator as boolean,\n\t\tEligibleForExportIndicator as boolean,\n\t\tCoManagedInventoryItemIndicator as boolean,\n\t\tRotableItemIndicator as boolean,\n\t\tConsignmentItemIndicator as boolean,\n\t\tSerializedItemIndicator as boolean,\n\t\tTrackSerialNumberIndicator as boolean,\n\t\tRepairableItemIndicator as boolean,\n\t\tRepairPeriod as decimal(18,2),\n\t\tItemIdentificationMethodId as integer,\n\t\tCommodityTypeId as integer,\n\t\tItemSafetyClassificationId as integer,\n\t\tStandardStorageUnitTypeId as integer,\n\t\tSecurityLevelId as integer,\n\t\tVendorId as integer,\n\t\tFamilyGroupId as integer,\n\t\tHazardSeverityCategoryId as integer,\n\t\tDepreciationMethodId as integer,\n\t\tBarCodeId as integer,\n\t\tItemTypeId as integer\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MARA@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tInformationLabelText = ETIFO,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tWeightUomId = GEWEI,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tItemTypeId = MTART\n\t)) ~> Item"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/MARA')]",
+				"[concat(variables('workspaceId'), '/datasets/MAKT')]",
+				"[concat(variables('workspaceId'), '/datasets/Item')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/Dataflow1')]",
