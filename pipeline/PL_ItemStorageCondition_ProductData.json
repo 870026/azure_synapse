@@ -1,0 +1,31 @@
+{
+   "name" : "PL_ItemStorageCondition_ProductData",
+   "type" : "Microsoft.DataFactory/factories/pipelines",
+   "apiVersion" : "2018-06-01",
+   "properties" : {
+      "activities" : [ {
+         "name" : "DF_ItemStorageCondition_ProductData",
+         "type" : "ExecuteDataFlow",
+         "policy" : {
+            "timeout" : "7.00:00:00",
+            "retry" : 0,
+            "retryIntervalInSeconds" : 30,
+            "secureOutput" : false,
+            "secureInput" : false
+         },
+         "typeProperties" : {
+            "dataflow" : {
+               "type" : "DataFlowReference",
+               "referenceName" : "DF_ItemStorageCondition_ProductData"
+            },
+            "staging" : {
+               "linkedService" : {
+                  "referenceName" : "AzureBlobStorage1",
+                  "type" : "LinkedServiceReference"
+               }
+            }
+         }
+      } ]
+   },
+   "dependsOn" : [ "[concat(variables('factoryId'), '/dataflows/DF_ItemStorageCondition_ProductData')]" ]
+}
