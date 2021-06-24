@@ -1,27 +1,31 @@
 {
-   "name" : "ItemStorageCondition",
-   "type" : "Microsoft.DataFactory/factories/datasets",
-   "properties" : {
-      "linkedServiceName" : {
-         "referenceName" : "LS_IDW_AZURESYNAPSE",
-         "type" : "LinkedServiceReference"
-      },
-      "type" : "AzureSqlDWTable",
-      "typeProperties" : {
-         "firstRowAsHeader" : false,
-         "schema" : "main",
-         "table" : "ItemStorageCondition"
-      },
-      "schema" : [ {
-         "name" : "ItemSku",
-         "type" : "string"
-      }, {
-         "name" : "StorageConditionId",
-         "type" : "integer"
-      }, {
-         "name" : "ItemStorageConditionNote",
-         "type" : "string"
-      } ]
-   },
-   "dependsOn" : [ ]
+	"name": "ItemStorageCondition",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "ItemSku",
+				"type": "string"
+			},
+			{
+				"name": "StorageConditionId",
+				"type": "integer"
+			},
+			{
+				"name": "ItemStorageConditionNote",
+				"type": "string"
+			}
+		],
+		"typeProperties": {
+			"schema": "main",
+			"table": "ItemStorageCondition",
+			"firstRowAsHeader": false
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
