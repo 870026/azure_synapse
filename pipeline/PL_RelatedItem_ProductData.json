@@ -1,0 +1,32 @@
+{
+   "name" : "PL_RelatedItem_ProductData",
+   "type" : "Microsoft.DataFactory/factories/pipelines",
+   "apiVersion" : "2018-06-01",
+   "properties" : {
+      "activities" : [ {
+         "name" : "DF_RelatedItem_ProductData",
+         "type" : "ExecuteDataFlow",
+         "policy" : {
+            "timeout" : "7.00:00:00",
+            "retry" : 0,
+            "retryIntervalInSeconds" : 30,
+            "secureOutput" : false,
+            "secureInput" : false
+         },
+         "typeProperties" : {
+            "dataflow" : {
+               "type" : "DataFlowReference",
+               "referenceName" : "DF_RelatedItem_ProductData"
+            },
+            "staging" : {
+               "linkedService" : {
+                  "referenceName" : "LS_SDI_BLOB",
+                  "type" : "LinkedServiceReference"
+               },
+               "folderPath" : "stg"
+            }
+         }
+      } ]
+   },
+   "dependsOn" : [ "[concat(variables('factoryId'), '/dataflows/DF_RelatedItem_ProductData')]" ]
+}
