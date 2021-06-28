@@ -27,7 +27,7 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "main",
+			"schema": "dbo",
 			"table": "RelatedItem",
 			"firstRowAsHeader": false
 		}
