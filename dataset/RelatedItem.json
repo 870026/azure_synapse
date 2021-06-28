@@ -1,32 +1,36 @@
-
- {
- "name" : "RelatedItem",
- "type" : "Microsoft.DataFactory/factories/datasets",
- "properties" : {
- "linkedServiceName" : {
- "referenceName" : "LS_IDW_AZURESYNAPSE",
- "type" : "LinkedServiceReference"
- },
- "type" : "AzureSqlDWTable",
- "typeProperties" : {
- "firstRowAsHeader" : false,
- "schema" : "main",
- "table" : "RelatedItem"
- },
- "schema" : [ {
- "name" : "ItemSku",
- "type" : "NVARCHAR"
- }, {
- "name" : "RelatedItemSku",
- "type" : "NVARCHAR"
- }, {
- "name" : "ItemRelationshipTypeId",
- "type" : "INT",
- "precision" : 0
- }, {
- "name" : "ItemRelationshipNote",
- "type" : "NVARCHAR"
- } ]
- },
- "dependsOn" : [ ]
- }
+{
+	"name": "RelatedItem",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "ItemSku",
+				"type": "NVARCHAR"
+			},
+			{
+				"name": "RelatedItemSku",
+				"type": "NVARCHAR"
+			},
+			{
+				"name": "ItemRelationshipTypeId",
+				"type": "INT",
+				"precision": 0
+			},
+			{
+				"name": "ItemRelationshipNote",
+				"type": "NVARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "RelatedItem",
+			"firstRowAsHeader": false
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
