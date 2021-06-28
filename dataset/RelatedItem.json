@@ -1,0 +1,32 @@
+
+ {
+ "name" : "RelatedItem",
+ "type" : "Microsoft.DataFactory/factories/datasets",
+ "properties" : {
+ "linkedServiceName" : {
+ "referenceName" : "LS_IDW_AZURESYNAPSE",
+ "type" : "LinkedServiceReference"
+ },
+ "type" : "AzureSqlDWTable",
+ "typeProperties" : {
+ "firstRowAsHeader" : false,
+ "schema" : "main",
+ "table" : "RelatedItem"
+ },
+ "schema" : [ {
+ "name" : "ItemSku",
+ "type" : "NVARCHAR"
+ }, {
+ "name" : "RelatedItemSku",
+ "type" : "NVARCHAR"
+ }, {
+ "name" : "ItemRelationshipTypeId",
+ "type" : "INT",
+ "precision" : 0
+ }, {
+ "name" : "ItemRelationshipNote",
+ "type" : "NVARCHAR"
+ } ]
+ },
+ "dependsOn" : [ ]
+ }
