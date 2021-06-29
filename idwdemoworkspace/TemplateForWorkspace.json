@@ -245,8 +245,57 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_ItemStorageCondition_ProductData')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PL_RelatedItem_ProductData')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "DF_RelatedItem_ProductData",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_RelatedItem_ProductData",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"MARA": {},
+									"RelatedItem": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "LS_IDWAzureBlobConns_001",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dif"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/DF_RelatedItem_ProductData')]",
+				"[concat(variables('workspaceId'), '/linkedServices/LS_IDWAzureBlobConns_001')]"
 			]
 		},
 		{
@@ -616,6 +665,46 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/RelatedItem')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "ItemSku",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "RelatedItemSku",
+						"type": "NVARCHAR"
+					},
+					{
+						"name": "ItemRelationshipTypeId",
+						"type": "INT",
+						"precision": 0
+					},
+					{
+						"name": "ItemRelationshipNote",
+						"type": "NVARCHAR"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "RelatedItem",
+					"firstRowAsHeader": false
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureBlobStorage1')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -832,12 +921,53 @@
 							"name": "ExpItemStorageCondition"
 						}
 					],
-					"script": "source(output(\n\t\tTEMPB as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpItemStorageCondition filter(!isNull(TEMPB)) ~> Filter2\nMARA derive(StorageConditionId = 9999) ~> ExpItemStorageCondition\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tStorageConditionId as integer,\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tStorageConditionId,\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
+					"script": "source(output(\n\t\tTEMPB as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpItemStorageCondition filter(!isNull(TEMPB)) ~> Filter2\nMARA derive(StorageConditionId = 9999) ~> ExpItemStorageCondition\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tStorageConditionId as integer,\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tStorageConditionId,\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/MARA')]",
 				"[concat(variables('workspaceId'), '/datasets/ItemStorageCondition')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DF_RelatedItem_ProductData')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "MARA",
+								"type": "DatasetReference"
+							},
+							"name": "MARA"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "RelatedItem",
+								"type": "DatasetReference"
+							},
+							"name": "RelatedItem"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Filter1"
+						},
+						{
+							"name": "ExpRelatedItem"
+						}
+					],
+					"script": "source(output(\n\t\tSTOFF as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpRelatedItem filter(!isNull(STOFF)) ~> Filter1\nMARA derive(ItemRelationshipTypeId = 99999,\n\t\tItemRelationshipNote = 'Hazardous Material') ~> ExpRelatedItem\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tRelatedItemSku as string,\n\t\tItemRelationshipTypeId as integer,\n\t\tItemRelationshipNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tRelatedItemSku = STOFF,\n\t\tItemRelationshipTypeId,\n\t\tItemRelationshipNote\n\t)) ~> RelatedItem"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/MARA')]",
+				"[concat(variables('workspaceId'), '/datasets/RelatedItem')]"
 			]
 		},
 		{
