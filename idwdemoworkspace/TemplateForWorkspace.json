@@ -278,7 +278,7 @@
 							},
 							"staging": {
 								"linkedService": {
-									"referenceName": "LS_IDWAzureBlobConns_001",
+									"referenceName": "AzureBlobStorage1",
 									"type": "LinkedServiceReference"
 								},
 								"folderPath": "dif"
@@ -295,7 +295,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_RelatedItem_ProductData')]",
-				"[concat(variables('workspaceId'), '/linkedServices/LS_IDWAzureBlobConns_001')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
 			]
 		},
 		{
