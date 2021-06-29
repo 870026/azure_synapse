@@ -21,7 +21,7 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "LS_IDWAzureBlobConns_001",
+							"referenceName": "AzureBlobStorage1",
 							"type": "LinkedServiceReference"
 						},
 						"folderPath": "dif"
