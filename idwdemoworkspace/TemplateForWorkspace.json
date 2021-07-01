@@ -245,8 +245,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_ItemStorageCondition_ProductData')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
 			]
 		},
 		{
@@ -971,7 +970,7 @@
 							"name": "ExpItemStorageCondition"
 						}
 					],
-					"script": "source(output(\n\t\tTEMPB as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpItemStorageCondition filter(!isNull(TEMPB)) ~> Filter2\nMARA derive(StorageConditionId = 9999) ~> ExpItemStorageCondition\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tStorageConditionId as integer,\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tStorageConditionId,\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
+					"script": "source(output(\n\t\tTEMPB as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpItemStorageCondition filter(!isNull(TEMPB)) ~> Filter2\nMARA derive(StorageConditionId = 9999) ~> ExpItemStorageCondition\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tStorageConditionId as integer,\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tStorageConditionId,\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
 				}
 			},
 			"dependsOn": [
