@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "MARA2new.csv",
+				"fileName": "MARA123.csv",
 				"container": "dif"
 			},
 			"columnDelimiter": ",",
