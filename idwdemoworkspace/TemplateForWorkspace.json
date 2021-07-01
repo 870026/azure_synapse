@@ -245,7 +245,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_ItemStorageCondition_ProductData')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -586,7 +587,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "MARA123.csv",
+						"fileName": "MARA1234.csv",
 						"container": "dif"
 					},
 					"columnDelimiter": ",",
