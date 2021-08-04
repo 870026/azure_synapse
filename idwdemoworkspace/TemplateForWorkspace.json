@@ -282,7 +282,7 @@
 									"referenceName": "AzureBlobStorage1",
 									"type": "LinkedServiceReference"
 								},
-								"folderPath": "stg"
+								"folderPath": "dif"
 							},
 							"compute": {
 								"coreCount": 8,
