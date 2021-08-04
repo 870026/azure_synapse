@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "MAKTnew.csv",
+				"fileName": "MAKT Copy.txt",
 				"container": "dif"
 			},
 			"columnDelimiter": ",",
