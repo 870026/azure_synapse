@@ -346,8 +346,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_RelatedItem_ProductData')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
 			]
 		},
 		{
@@ -957,7 +956,7 @@
 					}
 				],
 				"typeProperties": {
-					"schema": "main",
+					"schema": "dbo",
 					"table": "Item",
 					"firstRowAsHeader": false
 				}
