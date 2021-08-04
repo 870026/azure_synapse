@@ -415,7 +415,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Item",
+			"table": "ItemTest",
 			"firstRowAsHeader": false
 		}
 	},
