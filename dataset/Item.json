@@ -414,7 +414,7 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "main",
+			"schema": "dbo",
 			"table": "Item",
 			"firstRowAsHeader": false
 		}
