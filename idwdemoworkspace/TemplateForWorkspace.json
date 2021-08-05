@@ -249,58 +249,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/PL_Item_ProductData_1')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Item_ProductData_1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Item_ProductData_1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"MARA": {},
-									"MAKT": {},
-									"ItemNew": {}
-								}
-							},
-							"staging": {
-								"linkedService": {
-									"referenceName": "AzureBlobStorage1",
-									"type": "LinkedServiceReference"
-								},
-								"folderPath": "dif"
-							},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/DF_Item_ProductData_1')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/PL_RelatedItem_ProductData')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -537,137 +485,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/ItemNew')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSynapseAnalytics1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "ItemSku",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "ItemDescription",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "DescriptiveLabelText",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "ItemIndustryGroup",
-						"type": "CHAR"
-					},
-					{
-						"name": "ItemGroupID",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "BaseUOMID",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "PurchaseOrderUOMID",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "SizeDimension",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "ItemWeightGross",
-						"type": "DECIMAL",
-						"precision": 0,
-						"scale": 0
-					},
-					{
-						"name": "ItemWeightNet",
-						"type": "DECIMAL",
-						"precision": 0,
-						"scale": 0
-					},
-					{
-						"name": "ItemTypeId",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "WeightUomId",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "ItemVolume",
-						"type": "DECIMAL",
-						"precision": 0,
-						"scale": 0
-					},
-					{
-						"name": "ItemVolumeUomId",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "StandardStorageUnitTypeId",
-						"type": "CHAR"
-					},
-					{
-						"name": "TransporationGroupTypeId",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "GradeLabelText",
-						"type": "CHAR"
-					},
-					{
-						"name": "InformationLabelText",
-						"type": "CHAR"
-					},
-					{
-						"name": "GlobalTradeItemNumber",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "GlobalTradeItemNumberCategory",
-						"type": "CHAR"
-					},
-					{
-						"name": "ItemLength",
-						"type": "DECIMAL",
-						"precision": 0,
-						"scale": 0
-					},
-					{
-						"name": "ItemWidth",
-						"type": "DECIMAL",
-						"precision": 0,
-						"scale": 0
-					},
-					{
-						"name": "ItemHeight",
-						"type": "DECIMAL",
-						"precision": 0,
-						"scale": 0
-					},
-					{
-						"name": "LwhUomId",
-						"type": "VARCHAR"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "ItemNew",
-					"firstRowAsHeader": false
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics1')]"
 			]
 		},
 		{
@@ -1153,58 +970,12 @@
 							"name": "ExpItemStorageCondition"
 						}
 					],
-					"script": "source(output(\n\t\tTEMPB as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpItemStorageCondition filter(!isNull(TEMPB)) ~> Filter2\nMARA derive(StorageConditionId = 9999) ~> ExpItemStorageCondition\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tStorageConditionId as integer,\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tStorageConditionId,\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
+					"script": "source(output(\n\t\tTEMPB as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpItemStorageCondition filter(!isNull(TEMPB)) ~> Filter2\nMARA derive(StorageConditionId = 9999) ~> ExpItemStorageCondition\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tStorageConditionId as integer,\n\t\tItemStorageConditionNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tStorageConditionId,\n\t\tItemStorageConditionNote = TEMPB\n\t)) ~> ItemStorageCondition"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/MARA')]",
 				"[concat(variables('workspaceId'), '/datasets/ItemStorageCondition')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/DF_Item_ProductData_1')]",
-			"type": "Microsoft.Synapse/workspaces/dataflows",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "MARA",
-								"type": "DatasetReference"
-							},
-							"name": "MARA"
-						},
-						{
-							"dataset": {
-								"referenceName": "MAKT",
-								"type": "DatasetReference"
-							},
-							"name": "MAKT"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ItemNew",
-								"type": "DatasetReference"
-							},
-							"name": "ItemNew"
-						}
-					],
-					"transformations": [
-						{
-							"name": "jnrMARA"
-						}
-					],
-					"script": "source(output(\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(10,0),\n\t\tVOLEH as string,\n\t\tRAUBE as string,\n\t\tETIFO as string,\n\t\tEAN11 as string,\n\t\tLAENG as decimal(10,0),\n\t\tBREIT as decimal(10,0),\n\t\tHOEHE as decimal(10,0),\n\t\tMEABM as string,\n\t\tMTART as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nsource(output(\n\t\tMATNR as string,\n\t\tMAKTX as string,\n\t\tMAKTG as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MAKT\nMAKT, MARA join(MAKT@MATNR == MARA@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> jnrMARA\njnrMARA sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tItemDescription as string,\n\t\tDescriptiveLabelText as string,\n\t\tItemIndustryGroup as string,\n\t\tItemGroupID as string,\n\t\tBaseUOMID as string,\n\t\tPurchaseOrderUOMID as string,\n\t\tSizeDimension as string,\n\t\tItemWeightGross as decimal(0,0),\n\t\tItemWeightNet as decimal(0,0),\n\t\tItemTypeId as string,\n\t\tWeightUomId as string,\n\t\tItemVolume as decimal(0,0),\n\t\tItemVolumeUomId as string,\n\t\tStandardStorageUnitTypeId as string,\n\t\tTransporationGroupTypeId as string,\n\t\tGradeLabelText as string,\n\t\tInformationLabelText as string,\n\t\tGlobalTradeItemNumber as string,\n\t\tGlobalTradeItemNumberCategory as string,\n\t\tItemLength as decimal(0,0),\n\t\tItemWidth as decimal(0,0),\n\t\tItemHeight as decimal(0,0),\n\t\tLwhUomId as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MAKT@MATNR,\n\t\tItemDescription = MAKTX,\n\t\tDescriptiveLabelText = MAKTG,\n\t\tItemTypeId = MTART,\n\t\tWeightUomId = GEWEI,\n\t\tItemVolume = VOLUM,\n\t\tItemVolumeUomId = VOLEH,\n\t\tStandardStorageUnitTypeId = RAUBE,\n\t\tInformationLabelText = ETIFO,\n\t\tGlobalTradeItemNumber = EAN11,\n\t\tItemLength = LAENG,\n\t\tItemWidth = BREIT,\n\t\tItemHeight = HOEHE,\n\t\tLwhUomId = MEABM\n\t)) ~> ItemNew"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/MARA')]",
-				"[concat(variables('workspaceId'), '/datasets/MAKT')]",
-				"[concat(variables('workspaceId'), '/datasets/ItemNew')]"
 			]
 		},
 		{
@@ -1240,7 +1011,7 @@
 							"name": "ExpRelatedItem"
 						}
 					],
-					"script": "source(output(\n\t\tSTOFF as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpRelatedItem filter(!isNull(STOFF)) ~> Filter1\nMARA derive(ItemRelationshipTypeId = 99999,\n\t\tItemRelationshipNote = 'Hazardous Material') ~> ExpRelatedItem\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tRelatedItemSku as string,\n\t\tItemRelationshipTypeId as integer,\n\t\tItemRelationshipNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tRelatedItemSku = STOFF,\n\t\tItemRelationshipTypeId,\n\t\tItemRelationshipNote\n\t)) ~> RelatedItem"
+					"script": "source(output(\n\t\tSTOFF as string,\n\t\tMATNR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MARA\nExpRelatedItem filter(!isNull(STOFF)) ~> Filter1\nMARA derive(ItemRelationshipTypeId = 99999,\n\t\tItemRelationshipNote = 'Hazardous Material') ~> ExpRelatedItem\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tItemSku as string,\n\t\tRelatedItemSku as string,\n\t\tItemRelationshipTypeId as integer,\n\t\tItemRelationshipNote as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tItemSku = MATNR,\n\t\tRelatedItemSku = STOFF,\n\t\tItemRelationshipTypeId,\n\t\tItemRelationshipNote\n\t)) ~> RelatedItem"
 				}
 			},
 			"dependsOn": [
