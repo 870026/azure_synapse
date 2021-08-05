@@ -37,7 +37,7 @@
 			},
 			{
 				"name": "MTART",
-				"type": "String"
+				"type": "decimal"
 			},
 			{
 				"name": "MBRSH",
