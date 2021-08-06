@@ -10,25 +10,157 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "source1.txt",
+				"fileName": "T134.csv",
 				"container": "dif"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
-			"firstRowAsHeader": false,
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": [
 			{
+				"name": "MANDT",
 				"type": "String"
 			},
 			{
+				"name": "MTART",
 				"type": "String"
 			},
 			{
+				"name": "MTREF",
 				"type": "String"
 			},
 			{
+				"name": "MBREF",
+				"type": "String"
+			},
+			{
+				"name": "FLREF",
+				"type": "String"
+			},
+			{
+				"name": "NUMKI",
+				"type": "integer"
+			},
+			{
+				"name": "NUMKE",
+				"type": "String"
+			},
+			{
+				"name": "ENVOP",
+				"type": "String"
+			},
+			{
+				"name": "BSEXT",
+				"type": "String"
+			},
+			{
+				"name": "BSINT",
+				"type": "String"
+			},
+			{
+				"name": "PSTAT",
+				"type": "String"
+			},
+			{
+				"name": "KKREF",
+				"type": "String"
+			},
+			{
+				"name": "VPRSV",
+				"type": "String"
+			},
+			{
+				"name": "KZVPR",
+				"type": "String"
+			},
+			{
+				"name": "VMTPO",
+				"type": "String"
+			},
+			{
+				"name": "EKALR",
+				"type": "String"
+			},
+			{
+				"name": "KZGRP",
+				"type": "String"
+			},
+			{
+				"name": "KZKFG",
+				"type": "String"
+			},
+			{
+				"name": "BEGRU",
+				"type": "String"
+			},
+			{
+				"name": "KZPRC",
+				"type": "String"
+			},
+			{
+				"name": "KZPIP",
+				"type": "String"
+			},
+			{
+				"name": "PRDRU",
+				"type": "String"
+			},
+			{
+				"name": "ARANZ",
+				"type": "String"
+			},
+			{
+				"name": "WMAKG",
+				"type": "String"
+			},
+			{
+				"name": "IZUST",
+				"type": "String"
+			},
+			{
+				"name": "ARDEL",
+				"type": "String"
+			},
+			{
+				"name": "KZMPN",
+				"type": "String"
+			},
+			{
+				"name": "MSTAE",
+				"type": "String"
+			},
+			{
+				"name": "CCHIS",
+				"type": "String"
+			},
+			{
+				"name": "CTYPE",
+				"type": "String"
+			},
+			{
+				"name": "CLASS",
+				"type": "String"
+			},
+			{
+				"name": "CHNEU",
+				"type": "String"
+			},
+			{
+				"name": "VTYPE",
+				"type": "String"
+			},
+			{
+				"name": "VNUMKI",
+				"type": "String"
+			},
+			{
+				"name": "VNUMKE",
+				"type": "String"
+			},
+			{
+				"name": "KZRAC",
 				"type": "String"
 			}
 		]
