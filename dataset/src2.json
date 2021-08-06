@@ -1,0 +1,32 @@
+{
+	"name": "src2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "source2lk.txt",
+				"container": "dif"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "s1",
+				"type": "String"
+			},
+			{
+				"name": "s2",
+				"type": "String"
+			}
+		]
+	}
+}
