@@ -257,14 +257,7 @@
 					{
 						"name": "DF_Item_ProductData",
 						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -302,45 +295,13 @@
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"dataset": {
-								"referenceName": "T142",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
 					}
 				],
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/DF_Item_ProductData')]",
-				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]",
-				"[concat(variables('workspaceId'), '/datasets/T142')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
 			]
 		},
 		{
